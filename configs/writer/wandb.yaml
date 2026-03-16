@@ -1,0 +1,5 @@
+kind: wandb
+project_name: insulator-defect-mre
+entity: null
+mode: online
+run_name: null

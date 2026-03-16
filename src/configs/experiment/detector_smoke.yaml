@@ -1,0 +1,27 @@
+# @package _global_
+# Fast smoke experiment overrides
+run_name: detector_smoke
+
+num_classes: 2
+learning_rate: 0.0005
+epochs: 1
+image_size: 320
+resize: true
+resize_mode: pad
+batch_size: 1
+num_workers: 0
+score_threshold: 0.05
+pretrained: false
+
+train_dir: data/processed/train
+val_dir: data/processed/val
+test_dir: data/processed/test
+
+train_output_dir: outputs/train
+checkpoint_path: outputs/train/detector_smoke/best.pth
+output_dir: outputs/eval/detector_smoke
+
+vis_samples: 4
+
+class_names:
+  "1": defect

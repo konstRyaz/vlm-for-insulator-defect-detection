@@ -1,0 +1,11 @@
+torch
+torchvision
+hydra-core
+omegaconf
+pycocotools
+numpy
+pillow
+tqdm
+matplotlib
+PyYAML
+wandb
