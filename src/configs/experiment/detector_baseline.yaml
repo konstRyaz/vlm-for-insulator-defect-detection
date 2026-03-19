@@ -2,16 +2,16 @@
 # Shared experiment overrides for train/eval/infer
 run_name: detector_baseline
 
-num_classes: 2
+num_classes: 5
 learning_rate: 0.0005
-epochs: 2
-image_size: 512
+epochs: 12
+image_size: 640
 resize: true
 resize_mode: pad
 batch_size: 2
-num_workers: 0
+num_workers: 2
 score_threshold: 0.05
-pretrained: false
+pretrained: true
 
 train_dir: data/processed/train
 val_dir: data/processed/val
@@ -24,4 +24,7 @@ output_dir: outputs/eval/detector_baseline
 vis_samples: 8
 
 class_names:
-  "1": defect
+  "1": insulator_ok
+  "2": defect_flashover
+  "3": defect_broken
+  "4": unknown
