@@ -2,6 +2,20 @@
 
 Minimal reproducible project for defect detection on power-line insulators.
 
+## Current project status (2026-03-22)
+
+- Stage 2 is formally closed: Faster R-CNN baseline is frozen as `detector_baseline_v1`.
+- Current priority is Stage 3 entry: `GT bbox -> VLM -> pred bbox -> end-to-end report`.
+- YOLO is explicitly optional later and is not a current blocking step.
+
+Key docs:
+
+- `docs/detector_baseline_v1.md`
+- `docs/detector_to_vlm_contract.md`
+- `docs/vlm_labels_v1_spec.md`
+- `docs/stage3_gt_bbox_to_vlm_plan.md`
+- `docs/stage3_pilot_quickstart.md`
+
 ## Project layout
 
 ```text
@@ -19,7 +33,8 @@ Minimal reproducible project for defect detection on power-line insulators.
 |-- scripts/
 |   |-- make_toy_coco.py
 |   |-- prepare_data.py
-|   `-- idid_to_coco.py
+|   |-- idid_to_coco.py
+|   `-- export_vlm_crops.py
 |-- notebooks/
 |   `-- smoke_test.ipynb
 |-- requirements.txt
@@ -108,6 +123,32 @@ Optional summary path:
 
 ```bash
 python scripts/idid_to_coco.py ... --summary-path data/raw/idid_coco/reports/conversion_summary.json
+```
+
+### 7) Export GT bbox crops for Stage 3 VLM baseline
+
+```bash
+python scripts/export_vlm_crops.py \
+  --coco-json data/processed/val/annotations.json \
+  --images-dir data/processed/val/images \
+  --output-dir outputs/stage3_gt_crops/val \
+  --split val \
+  --padding-ratio 0.15 \
+  --include-categories defect_flashover defect_broken insulator_ok unknown \
+  --manifest-name manifest.jsonl \
+  --limit 50
+```
+
+### 8) Bootstrap and validate `vlm_labels_v1` pilot
+
+```bash
+python scripts/bootstrap_vlm_labels_pilot.py \
+  --manifest outputs/stage3_gt_crops/val/manifest.jsonl \
+  --output outputs/stage3_gt_crops/val/vlm_labels_v1_pilot.jsonl \
+  --limit 50
+
+python scripts/validate_vlm_labels_v1.py \
+  --input outputs/stage3_gt_crops/val/vlm_labels_v1_pilot.jsonl
 ```
 
 ## What is saved

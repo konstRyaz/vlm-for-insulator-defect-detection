@@ -13,6 +13,13 @@ The project should be strong in two dimensions:
 - engineering: reproducible training/evaluation/inference pipeline;
 - research: measurable comparison of prompting/input strategies and at least 1-2 justified improvements.
 
+## Status update (2026-03-22)
+
+- Stage 1 is complete for the current baseline path.
+- Stage 2 is formally closed with frozen Faster R-CNN `detector_baseline_v1`.
+- Current active stage is Stage 3 entry: `GT bbox -> VLM` first, then `pred bbox -> VLM`.
+- YOLO is optional and non-blocking for the current milestone.
+
 ## Current repo status
 
 What is already present in the repository:
@@ -24,11 +31,9 @@ What is already present in the repository:
 
 Important practical note:
 
-- the repository already supports Faster R-CNN out of the box;
-- for the main baseline, YOLO is still a good choice if the priority is speed, simpler deployment, and stronger "real-time" framing;
-- the safest path is:
-  - keep Faster R-CNN as the existing code baseline;
-  - optionally add YOLO as the main practical baseline and compare it against Faster R-CNN only if time allows.
+- the repository already supports Faster R-CNN out of the box and this baseline is already validated;
+- current priority is not detector benchmark expansion, but detector-to-VLM integration;
+- YOLO can be added later as an optional comparison/appendix branch if time remains.
 
 ## Evaluation principles
 
@@ -48,7 +53,7 @@ Why this matters:
 
 ## Stage 1 - Data
 
-Status: mostly done
+Status: closed for baseline trajectory
 
 ### Goal
 
@@ -103,6 +108,8 @@ Optional later:
 
 ## Stage 2 - Detector baseline
 
+Status: closed as `detector_baseline_v1`
+
 ### Goal
 
 Get a working detector with non-zero metrics, understandable failures, and a validated training pipeline.
@@ -117,18 +124,11 @@ Get a working detector with non-zero metrics, understandable failures, and a val
 
 ### Recommended baseline choice
 
-Primary recommendation:
+Current project decision:
 
-- use YOLO as the practical main baseline if you want faster inference and easier product-style demo
-
-Fallback / existing baseline:
-
-- use the current Faster R-CNN pipeline first if the immediate goal is to start experiments with minimal engineering overhead
-
-Best compromise:
-
-1. run the current Faster R-CNN baseline first to validate the dataset and training loop;
-2. if the pipeline is healthy, add YOLO and make it the main detector for the rest of the project.
+- keep Faster R-CNN as the official frozen Stage 2 baseline (`detector_baseline_v1`);
+- do not start a new heavy detector cycle now;
+- treat YOLO as optional later comparison only.
 
 ### Definition of done
 
@@ -365,37 +365,34 @@ The rule for this stage is simple:
 
 Recommended practical order from today:
 
-1. Freeze `COCO_v1` and taxonomy.
-2. Add detector overfit config and pass the 1-5 image sanity test.
-3. Run the current Faster R-CNN baseline end-to-end.
-4. Decide whether YOLO is worth adding now or after the first valid detector result.
-5. Prepare a small labeled subset for `vlm_labels_v1`.
-6. Build VLM evaluation in `GT bbox -> VLM` mode first.
-7. Add `pred bbox -> VLM`.
-8. Run 1-2 focused improvement studies.
-9. Package the end-to-end report pipeline.
-10. Finalize tables, figures, and text.
+1. Freeze detector baseline artifacts and policy.
+2. Prepare `vlm_labels_v1` schema and pilot subset.
+3. Build `GT bbox -> VLM` baseline first.
+4. Add `pred bbox -> VLM` using frozen detector.
+5. Run focused ablations (threshold/top-k/routing, padding/context, unknown handling).
+6. Package end-to-end report generation.
+7. Finalize tables, figures, and text.
 
 ## Decision on YOLO vs Faster R-CNN
 
 Short answer:
 
-- yes, YOLO is the better choice if your main criterion is speed and a stronger real-time story;
-- no, you do not need to block progress on detector experiments until YOLO is integrated.
+- YOLO can still be useful for speed-focused practical comparison later;
+- YOLO is not required to proceed with Stage 3 and is not a blocking step now.
 
 Recommended decision rule:
 
-- if you want the fastest path to a valid baseline this week, use the existing Faster R-CNN code first;
-- if you are ready to spend extra engineering time for a stronger deployment story, add YOLO next and make it the main detector.
+- keep Faster R-CNN baseline frozen for the main project trajectory;
+- add YOLO only after Stage 3 baseline is standing and only if time remains.
 
 ## Immediate next sprint
 
 The next sprint should produce these concrete outputs:
 
-1. stable `COCO_v1`
-2. detector overfit test
-3. first real detector checkpoint
-4. first detector metrics report
-5. `vlm_labels_v1` specification for a small subset
+1. `detector -> VLM` operating contract (doc + config)
+2. `vlm_labels_v1` spec and schema
+3. GT crop export manifest for Stage 3
+4. first `GT bbox -> VLM` baseline run on a pilot subset
+5. evaluation-ready artifacts for transition to `pred bbox -> VLM`
 
 If those five items exist, the project has real momentum and the rest becomes much easier to structure.
