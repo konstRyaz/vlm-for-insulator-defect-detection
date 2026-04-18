@@ -1,0 +1,73 @@
+version: 1
+name: stage3_vlm_gt_baseline_v1
+
+input:
+  dataset_jsonl: outputs/stage3_regrouped_v2/val/vlm_labels_v1_val_v2.annotated.jsonl
+  image_root: null
+
+output:
+  root_dir: outputs/stage3_vlm_baseline_runs
+  save_raw_payload: true
+
+run:
+  run_id: auto
+  resume: true
+  max_samples: null
+  sample_ids_file: null
+  fail_fast: false
+
+backend:
+  mode: qwen_hf
+  fallback_to_mock_if_unavailable: false
+  qwen_hf:
+    provider: huggingface_transformers
+    model_id: Qwen/Qwen2.5-VL-3B-Instruct
+    trust_remote_code: true
+    torch_dtype: auto
+    device_map: auto
+    attn_implementation: null
+    max_new_tokens: 220
+    do_sample: false
+    temperature: 0.0
+    top_p: 1.0
+    add_generation_prompt: true
+  openai_legacy:
+    provider: openai
+    api_base: https://api.openai.com/v1
+    api_key_env: OPENAI_API_KEY
+    model: gpt-4o-mini
+    temperature: 0.0
+    max_tokens: 600
+    response_format: json_object
+    timeout_sec: 120
+
+prompt:
+  system_path: configs/pipeline/prompts/stage3_vlm_system_v1.txt
+  user_path: configs/pipeline/prompts/stage3_vlm_user_v1.txt
+
+prediction_contract:
+  mode: reduced_subset_v1
+  model_predicted_core_fields:
+    - coarse_class
+    - visual_evidence_tags
+    - visibility
+    - short_canonical_description_en
+    - report_snippet_en
+  model_optional_debug_fields:
+    - annotator_notes
+  derived_fields:
+    - "needs_review = (visibility == 'ambiguous')"
+    - "short_canonical_description = short_canonical_description_en"
+    - "report_snippet = report_snippet_en"
+  copied_metadata_fields:
+    - record_id
+    - image_id
+    - box_id
+    - source
+    - split
+    - bbox_xywh
+    - crop_path
+    - image_path
+    - score
+    - category_name
+    - label_version

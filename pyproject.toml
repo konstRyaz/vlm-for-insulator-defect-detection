@@ -20,6 +20,8 @@ dependencies = [
   "matplotlib",
   "PyYAML",
   "wandb",
+  "transformers>=4.49.0",
+  "accelerate>=0.33.0",
 ]
 
 [tool.setuptools.packages.find]

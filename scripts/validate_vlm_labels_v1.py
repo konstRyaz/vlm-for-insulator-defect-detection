@@ -37,6 +37,10 @@ REQUIRED_FIELDS = {
 
 ALLOWED_FIELDS = REQUIRED_FIELDS.union(
     {
+        "short_canonical_description_ru",
+        "short_canonical_description_en",
+        "report_snippet_ru",
+        "report_snippet_en",
         "crop_path",
         "image_path",
         "score",
@@ -150,8 +154,36 @@ def validate_record(record: dict[str, Any], line_no: int) -> list[str]:
     if "short_canonical_description" in record and not is_non_empty_string(record["short_canonical_description"]):
         errors.append(f"line {line_no}: short_canonical_description must be non-empty string")
 
+    if (
+        "short_canonical_description_ru" in record
+        and record["short_canonical_description_ru"] is not None
+        and not isinstance(record["short_canonical_description_ru"], str)
+    ):
+        errors.append(f"line {line_no}: short_canonical_description_ru must be string if present")
+
+    if (
+        "short_canonical_description_en" in record
+        and record["short_canonical_description_en"] is not None
+        and not isinstance(record["short_canonical_description_en"], str)
+    ):
+        errors.append(f"line {line_no}: short_canonical_description_en must be string if present")
+
     if "report_snippet" in record and not is_non_empty_string(record["report_snippet"]):
         errors.append(f"line {line_no}: report_snippet must be non-empty string")
+
+    if (
+        "report_snippet_ru" in record
+        and record["report_snippet_ru"] is not None
+        and not isinstance(record["report_snippet_ru"], str)
+    ):
+        errors.append(f"line {line_no}: report_snippet_ru must be string if present")
+
+    if (
+        "report_snippet_en" in record
+        and record["report_snippet_en"] is not None
+        and not isinstance(record["report_snippet_en"], str)
+    ):
+        errors.append(f"line {line_no}: report_snippet_en must be string if present")
 
     if "crop_path" in record and record["crop_path"] is not None and not isinstance(record["crop_path"], str):
         errors.append(f"line {line_no}: crop_path must be string if present")
@@ -206,4 +238,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

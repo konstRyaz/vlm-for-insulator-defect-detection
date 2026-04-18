@@ -96,9 +96,21 @@
       "type": "string",
       "minLength": 1
     },
+    "short_canonical_description_ru": {
+      "type": "string"
+    },
+    "short_canonical_description_en": {
+      "type": "string"
+    },
     "report_snippet": {
       "type": "string",
       "minLength": 1
+    },
+    "report_snippet_ru": {
+      "type": "string"
+    },
+    "report_snippet_en": {
+      "type": "string"
     },
     "crop_path": {
       "type": "string"
@@ -123,4 +135,3 @@
     }
   }
 }
-

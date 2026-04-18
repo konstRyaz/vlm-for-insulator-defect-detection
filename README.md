@@ -2,11 +2,15 @@
 
 Minimal reproducible project for defect detection on power-line insulators.
 
-## Current project status (2026-03-22)
+## Current project status (2026-04-13)
 
 - Stage 2 is formally closed: Faster R-CNN baseline is frozen as `detector_baseline_v1`.
-- Current priority is Stage 3 entry: `GT bbox -> VLM -> pred bbox -> end-to-end report`.
-- YOLO is explicitly optional later and is not a current blocking step.
+- Stage 3 entry is active and prepared: detector-to-VLM contract, `vlm_labels_v1` schema, and GT-crop tooling are in place.
+- Annotation progress is complete for current subsets:
+  - pilot val: `40/40`
+  - train batch: `200/200`
+- Immediate next milestone: first `GT bbox -> VLM -> structured output` baseline run, then move to `pred bbox -> VLM`.
+- YOLO remains optional later and is not a current blocking step.
 
 Key docs:
 
@@ -15,6 +19,7 @@ Key docs:
 - `docs/vlm_labels_v1_spec.md`
 - `docs/stage3_gt_bbox_to_vlm_plan.md`
 - `docs/stage3_pilot_quickstart.md`
+- `docs/stage3_vlm_baseline_quickstart.md`
 
 ## Project layout
 
@@ -150,6 +155,50 @@ python scripts/bootstrap_vlm_labels_pilot.py \
 python scripts/validate_vlm_labels_v1.py \
   --input outputs/stage3_gt_crops/val/vlm_labels_v1_pilot.jsonl
 ```
+
+### 9) Stage 3 Qwen preflight (1 sample)
+
+```bash
+python scripts/run_stage3_vlm_baseline.py \
+  --config configs/pipeline/stage3_vlm_gt_baseline.yaml \
+  --backend-mode qwen_hf \
+  --run-id stage3_qwen_preflight_v1 \
+  --max-samples 1 \
+  --no-resume
+```
+
+### 10) Run first Stage 3 VLM baseline (Qwen2.5-VL, smoke)
+
+```bash
+python scripts/run_stage3_vlm_baseline.py \
+  --config configs/pipeline/stage3_vlm_gt_baseline.yaml \
+  --backend-mode qwen_hf \
+  --run-id stage3_qwen_smoke_v1 \
+  --max-samples 8 \
+  --no-resume
+```
+
+### 11) Run full Stage 3 `val_v2` baseline (Qwen2.5-VL)
+
+```bash
+python scripts/run_stage3_vlm_baseline.py \
+  --config configs/pipeline/stage3_vlm_gt_baseline.yaml \
+  --backend-mode qwen_hf \
+  --run-id stage3_qwen_val_v2 \
+  --no-resume
+```
+
+### 12) Evaluate Stage 3 VLM baseline outputs
+
+```bash
+python scripts/eval_stage3_vlm_baseline.py \
+  --run-dir outputs/stage3_vlm_baseline_runs/stage3_qwen_smoke_v1 \
+  --ground-truth-jsonl outputs/stage3_regrouped_v2/val/vlm_labels_v1_val_v2.annotated.jsonl
+```
+
+Notebook-oriented Stage 3 quickstart (Kaggle primary, Colab fallback):
+
+- `docs/stage3_vlm_baseline_quickstart.md`
 
 ## What is saved
 

@@ -13,12 +13,15 @@ The project should be strong in two dimensions:
 - engineering: reproducible training/evaluation/inference pipeline;
 - research: measurable comparison of prompting/input strategies and at least 1-2 justified improvements.
 
-## Status update (2026-03-22)
+## Status update (2026-04-13)
 
 - Stage 1 is complete for the current baseline path.
 - Stage 2 is formally closed with frozen Faster R-CNN `detector_baseline_v1`.
-- Current active stage is Stage 3 entry: `GT bbox -> VLM` first, then `pred bbox -> VLM`.
-- YOLO is optional and non-blocking for the current milestone.
+- Stage 3 entry is active: `GT bbox -> VLM` first, then `pred bbox -> VLM`.
+- Current annotation progress is complete for prepared subsets:
+  - pilot val: `40/40`
+  - train batch: `200/200`
+- YOLO remains optional and non-blocking for the current milestone.
 
 ## Current repo status
 
@@ -28,6 +31,13 @@ What is already present in the repository:
 - processed split validation reports in `data/processed/reports/`
 - training/evaluation/inference pipeline for a detector
 - baseline detector implementation based on `torchvision` Faster R-CNN
+- Stage 3 contract/spec/docs:
+  - `docs/detector_to_vlm_contract.md`
+  - `docs/vlm_labels_v1_spec.md`
+  - `docs/stage3_gt_bbox_to_vlm_plan.md`
+- Stage 3 annotation workflow:
+  - GT crop export + bootstrap + validation scripts
+  - local annotation UI in `tools/annotation_ui/`
 
 Important practical note:
 
@@ -389,10 +399,10 @@ Recommended decision rule:
 
 The next sprint should produce these concrete outputs:
 
-1. `detector -> VLM` operating contract (doc + config)
-2. `vlm_labels_v1` spec and schema
-3. GT crop export manifest for Stage 3
-4. first `GT bbox -> VLM` baseline run on a pilot subset
-5. evaluation-ready artifacts for transition to `pred bbox -> VLM`
+1. Freeze current annotation snapshot (`pilot 40/40`, `train_200 200/200`) as baseline data version.
+2. Implement first `GT bbox -> VLM` baseline runner with structured output.
+3. Add baseline evaluator against pilot labels (`visibility`, tag overlap/F1, qualitative error cases).
+4. Run first Stage 3 baseline and save reproducible artifacts/results.
+5. Prepare transition package for `pred bbox -> VLM` using the frozen detector-to-VLM contract.
 
 If those five items exist, the project has real momentum and the rest becomes much easier to structure.
