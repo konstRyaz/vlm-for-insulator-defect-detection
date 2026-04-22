@@ -1,0 +1,10 @@
+{
+  "selected_prompt": "qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock",
+  "recommendation": "freeze_v6d_stop_prompt_tuning",
+  "rule": {
+    "visibility_macro_f1_ge_v6d": false,
+    "abs_ambiguous_gap_lt_v6d": false,
+    "coarse_acc_no_regress": true,
+    "pred_ambiguous_rate_le_0_15": true
+  }
+}

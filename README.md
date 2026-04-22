@@ -2,14 +2,16 @@
 
 Minimal reproducible project for defect detection on power-line insulators.
 
-## Current project status (2026-04-13)
+## Current project status (2026-04-22)
 
 - Stage 2 is formally closed: Faster R-CNN baseline is frozen as `detector_baseline_v1`.
-- Stage 3 entry is active and prepared: detector-to-VLM contract, `vlm_labels_v1` schema, and GT-crop tooling are in place.
+- Stage 3 GT-crop VLM baseline is operational (Qwen2.5-VL) with full validation/evaluation artifacts.
 - Annotation progress is complete for current subsets:
   - pilot val: `40/40`
   - train batch: `200/200`
-- Immediate next milestone: first `GT bbox -> VLM -> structured output` baseline run, then move to `pred bbox -> VLM`.
+- Prompt calibration sweep (`v3/v4/v5a/v6*`) and final micro-ablation (`v6d` vs `v6f`) were completed.
+- Current frozen Stage 3 prompt: `qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock`.
+- Immediate next milestone: transition from `GT bbox -> VLM` to `pred bbox -> VLM` with frozen Stage 2 detector.
 - YOLO remains optional later and is not a current blocking step.
 
 Key docs:
@@ -20,6 +22,8 @@ Key docs:
 - `docs/stage3_gt_bbox_to_vlm_plan.md`
 - `docs/stage3_pilot_quickstart.md`
 - `docs/stage3_vlm_baseline_quickstart.md`
+- `reports/stage3_prompt_sweep_v6_checkpoint.md`
+- `reports/stage3_v6d_vs_v6f_checkpoint.md`
 
 ## Project layout
 
