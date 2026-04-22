@@ -77,6 +77,9 @@ prompt:
     qwen_vlm_labels_v1_prompt_v6e_partial_geometry:
       system_path: configs/pipeline/prompts/stage3_vlm_system_v6e_partial_geometry.txt
       user_path: configs/pipeline/prompts/stage3_vlm_user_v6e_partial_geometry.txt
+    qwen_vlm_labels_v1_prompt_v6f_balanced_notaglock_soft_ambiguous_raise:
+      system_path: configs/pipeline/prompts/stage3_vlm_system_v6f_balanced_notaglock_soft_ambiguous_raise.txt
+      user_path: configs/pipeline/prompts/stage3_vlm_user_v6f_balanced_notaglock_soft_ambiguous_raise.txt
   system_path: configs/pipeline/prompts/stage3_vlm_system_v1.txt
   user_path: configs/pipeline/prompts/stage3_vlm_user_v1.txt
 
