@@ -53,6 +53,9 @@ prompt:
     qwen_vlm_labels_v1_prompt_v3:
       system_path: configs/pipeline/prompts/stage3_vlm_system_v3_visibility_tag_calibrated.txt
       user_path: configs/pipeline/prompts/stage3_vlm_user_v3_visibility_tag_calibrated.txt
+    qwen_vlm_labels_v1_prompt_v4:
+      system_path: configs/pipeline/prompts/stage3_vlm_system_v4_visibility_recalibrated.txt
+      user_path: configs/pipeline/prompts/stage3_vlm_user_v4_visibility_recalibrated.txt
   system_path: configs/pipeline/prompts/stage3_vlm_system_v1.txt
   user_path: configs/pipeline/prompts/stage3_vlm_user_v1.txt
 
