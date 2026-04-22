@@ -19,11 +19,14 @@ Prompt assets:
 - `configs/pipeline/prompts/stage3_vlm_user_v1.txt`
 - `configs/pipeline/prompts/stage3_vlm_system_v2_conservative_visibility.txt`
 - `configs/pipeline/prompts/stage3_vlm_user_v2_conservative_visibility.txt`
+- `configs/pipeline/prompts/stage3_vlm_system_v3_visibility_tag_calibrated.txt`
+- `configs/pipeline/prompts/stage3_vlm_user_v3_visibility_tag_calibrated.txt`
 
 Prompt version selection:
 
 - default in config: `qwen_vlm_labels_v1_prompt_v1`
 - conservative tuning pass: `qwen_vlm_labels_v1_prompt_v2`
+- calibrated visibility/tag tuning pass: `qwen_vlm_labels_v1_prompt_v3`
 - CLI override: `--prompt-version <version>`
 
 Prediction contract mode: `reduced_subset_v1`
@@ -102,7 +105,7 @@ Full `val_v2` run:
 python scripts/run_stage3_vlm_baseline.py \
   --config configs/pipeline/stage3_vlm_gt_baseline.yaml \
   --backend-mode qwen_hf \
-  --prompt-version qwen_vlm_labels_v1_prompt_v2 \
+  --prompt-version qwen_vlm_labels_v1_prompt_v3 \
   --run-id stage3_qwen_val_v2 \
   --no-resume
 ```
