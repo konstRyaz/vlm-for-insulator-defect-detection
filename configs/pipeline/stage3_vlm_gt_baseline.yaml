@@ -59,6 +59,24 @@ prompt:
     qwen_vlm_labels_v1_prompt_v5:
       system_path: configs/pipeline/prompts/stage3_vlm_system_v5_visibility_gate.txt
       user_path: configs/pipeline/prompts/stage3_vlm_user_v5_visibility_gate.txt
+    qwen_vlm_labels_v1_prompt_v5a_visibility_gate_best:
+      system_path: configs/pipeline/prompts/stage3_vlm_system_v5a_visibility_gate_best.txt
+      user_path: configs/pipeline/prompts/stage3_vlm_user_v5a_visibility_gate_best.txt
+    qwen_vlm_labels_v1_prompt_v6a_notaglock:
+      system_path: configs/pipeline/prompts/stage3_vlm_system_v6a_notaglock.txt
+      user_path: configs/pipeline/prompts/stage3_vlm_user_v6a_notaglock.txt
+    qwen_vlm_labels_v1_prompt_v6b_positive_ambiguous:
+      system_path: configs/pipeline/prompts/stage3_vlm_system_v6b_positive_ambiguous.txt
+      user_path: configs/pipeline/prompts/stage3_vlm_user_v6b_positive_ambiguous.txt
+    qwen_vlm_labels_v1_prompt_v6c_balanced:
+      system_path: configs/pipeline/prompts/stage3_vlm_system_v6c_balanced.txt
+      user_path: configs/pipeline/prompts/stage3_vlm_user_v6c_balanced.txt
+    qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock:
+      system_path: configs/pipeline/prompts/stage3_vlm_system_v6d_balanced_notaglock.txt
+      user_path: configs/pipeline/prompts/stage3_vlm_user_v6d_balanced_notaglock.txt
+    qwen_vlm_labels_v1_prompt_v6e_partial_geometry:
+      system_path: configs/pipeline/prompts/stage3_vlm_system_v6e_partial_geometry.txt
+      user_path: configs/pipeline/prompts/stage3_vlm_user_v6e_partial_geometry.txt
   system_path: configs/pipeline/prompts/stage3_vlm_system_v1.txt
   user_path: configs/pipeline/prompts/stage3_vlm_user_v1.txt
 
