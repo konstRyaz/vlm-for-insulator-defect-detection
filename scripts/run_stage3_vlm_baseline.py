@@ -118,6 +118,12 @@ def parse_args() -> argparse.Namespace:
         help="Optional text file with record_id per line to run a targeted subset.",
     )
     parser.add_argument(
+        "--prompt-version",
+        type=str,
+        default=None,
+        help="Override prompt version key from config prompt.versions.",
+    )
+    parser.add_argument(
         "--fail-fast",
         action="store_true",
         help="Stop on first backend/parse/validation error.",
@@ -869,6 +875,8 @@ def apply_cli_overrides(cfg: dict[str, Any], args: argparse.Namespace) -> dict[s
         cfg_copy["run"]["max_samples"] = args.max_samples
     if args.sample_ids_file:
         cfg_copy["run"]["sample_ids_file"] = args.sample_ids_file
+    if args.prompt_version:
+        cfg_copy["prompt"]["version"] = args.prompt_version
     if args.fail_fast:
         cfg_copy["run"]["fail_fast"] = True
     if args.resume:
@@ -876,6 +884,33 @@ def apply_cli_overrides(cfg: dict[str, Any], args: argparse.Namespace) -> dict[s
     if args.no_resume:
         cfg_copy["run"]["resume"] = False
     return cfg_copy
+
+
+def resolve_prompt_paths(prompt_cfg: dict[str, Any]) -> tuple[str | None, Path, Path]:
+    selected_version: str | None = None
+    versions = prompt_cfg.get("versions")
+    requested_version = prompt_cfg.get("version")
+    if isinstance(requested_version, str):
+        requested_version = requested_version.strip()
+    else:
+        requested_version = None
+
+    if requested_version:
+        if not isinstance(versions, dict):
+            raise ValueError("prompt.version is set, but prompt.versions is not an object.")
+        version_cfg = versions.get(requested_version)
+        if not isinstance(version_cfg, dict):
+            raise ValueError(f"prompt version '{requested_version}' is not found in prompt.versions.")
+        system_raw = version_cfg.get("system_path", "")
+        user_raw = version_cfg.get("user_path", "")
+        selected_version = requested_version
+    else:
+        system_raw = prompt_cfg.get("system_path", "")
+        user_raw = prompt_cfg.get("user_path", "")
+
+    system_prompt_path = Path(str(system_raw)).resolve()
+    user_prompt_path = Path(str(user_raw)).resolve()
+    return selected_version, system_prompt_path, user_prompt_path
 
 
 def select_backend(cfg: dict[str, Any]) -> tuple[Any, list[str]]:
@@ -977,8 +1012,9 @@ def main() -> None:
     }
 
     prompt_cfg = cfg.get("prompt", {})
-    system_prompt_path = Path(prompt_cfg.get("system_path", "")).resolve()
-    user_prompt_path = Path(prompt_cfg.get("user_path", "")).resolve()
+    if not isinstance(prompt_cfg, dict):
+        raise ValueError("prompt config must be an object.")
+    selected_prompt_version, system_prompt_path, user_prompt_path = resolve_prompt_paths(prompt_cfg)
     if not system_prompt_path.exists():
         raise FileNotFoundError(f"System prompt file not found: {system_prompt_path}")
     if not user_prompt_path.exists():
@@ -997,6 +1033,11 @@ def main() -> None:
         "backend_mode_effective": backend_mode_effective,
         "backend_settings_effective": backend_settings_effective,
         "backend_notices": backend_notices,
+        "prompt_selection": {
+            "selected_version": selected_prompt_version,
+            "system_prompt_path": str(system_prompt_path),
+            "user_prompt_path": str(user_prompt_path),
+        },
         "prediction_contract": prediction_contract,
         "config": cfg,
     }
@@ -1188,6 +1229,11 @@ def main() -> None:
         "backend_mode_effective": backend_mode_effective,
         "backend_settings_effective": backend_settings_effective,
         "backend_notices": backend_notices,
+        "prompt_selection": {
+            "selected_version": selected_prompt_version,
+            "system_prompt_path": str(system_prompt_path),
+            "user_prompt_path": str(user_prompt_path),
+        },
         "prediction_contract": prediction_contract,
         "input_selection": {
             "sample_ids_file": str(sample_ids_path) if sample_ids_path is not None else None,

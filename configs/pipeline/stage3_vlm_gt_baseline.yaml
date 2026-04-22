@@ -42,6 +42,14 @@ backend:
     timeout_sec: 120
 
 prompt:
+  version: qwen_vlm_labels_v1_prompt_v1
+  versions:
+    qwen_vlm_labels_v1_prompt_v1:
+      system_path: configs/pipeline/prompts/stage3_vlm_system_v1.txt
+      user_path: configs/pipeline/prompts/stage3_vlm_user_v1.txt
+    qwen_vlm_labels_v1_prompt_v2:
+      system_path: configs/pipeline/prompts/stage3_vlm_system_v2_conservative_visibility.txt
+      user_path: configs/pipeline/prompts/stage3_vlm_user_v2_conservative_visibility.txt
   system_path: configs/pipeline/prompts/stage3_vlm_system_v1.txt
   user_path: configs/pipeline/prompts/stage3_vlm_user_v1.txt
 
