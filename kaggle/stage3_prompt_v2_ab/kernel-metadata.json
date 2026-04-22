@@ -1,0 +1,13 @@
+{
+  "id": "kostyaryazanov/stage3-prompt-v2-ab",
+  "title": "stage3-prompt-v2-ab",
+  "code_file": "stage3_prompt_v2_ab.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": "true",
+  "enable_gpu": "false",
+  "enable_internet": "true",
+  "dataset_sources": [
+    "kostyaryazanov/idid-coco-v3"
+  ]
+}
