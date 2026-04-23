@@ -1061,6 +1061,16 @@ def main() -> None:
     predictions_vlm_labels_v1_path = run_dir / "predictions_vlm_labels_v1.jsonl"
     failures_path = run_dir / "failures.jsonl"
 
+    # Keep the run artifact set stable even when the selected dataset is empty.
+    for path in [
+        sample_results_path,
+        raw_responses_path,
+        parsed_predictions_path,
+        predictions_vlm_labels_v1_path,
+        failures_path,
+    ]:
+        path.touch(exist_ok=True)
+
     processed_ids = load_processed_ids(sample_results_path) if resume_mode else set()
 
     counters = {

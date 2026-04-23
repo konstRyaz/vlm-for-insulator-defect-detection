@@ -11,7 +11,7 @@ detector:
   input_dir: data/processed/val/images
   config_path: src/configs/infer.yaml
   weights_path: outputs/train/detector_baseline/best.pth
-  conf_threshold: 0.3
+  conf_threshold: 0.05
   iou_threshold: 0.5
   max_detections_per_image: 100
   vis_samples: 8
@@ -20,11 +20,7 @@ detector:
 crop_export:
   coco_json: data/processed/val/annotations.json
   images_dir: data/processed/val/images
-  include_categories:
-    - insulator_ok
-    - defect_flashover
-    - defect_broken
-    - unknown
+  include_categories: null
   padding_ratio: 0.15
   manifest_name: pred_manifest.jsonl
   summary_name: pred_manifest_summary.json
