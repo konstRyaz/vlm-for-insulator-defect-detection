@@ -6,6 +6,13 @@ Flow:
 
 `val images -> detector_baseline_v1 -> predicted boxes/crops -> Stage 3 VLM (frozen) -> Stage 4 evaluation`
 
+Current clean Stage 4 default:
+
+- VLM model: `Qwen/Qwen2.5-VL-3B-Instruct`
+- prompt version: `qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock_nocroppath`
+
+The Stage 4 prompt removes `crop_path` from prompt-visible metadata so the VLM cannot read detector class names from crop folder paths.
+
 ## 1) Required inputs
 
 Check these paths in `configs/stage4_detector_to_vlm_pred_val.yaml`:
