@@ -13,15 +13,18 @@ The project should be strong in two dimensions:
 - engineering: reproducible training/evaluation/inference pipeline;
 - research: measurable comparison of prompting/input strategies and at least 1-2 justified improvements.
 
-## Status update (2026-04-13)
+## Status update (2026-04-23)
 
 - Stage 1 is complete for the current baseline path.
 - Stage 2 is formally closed with frozen Faster R-CNN `detector_baseline_v1`.
-- Stage 3 entry is active: `GT bbox -> VLM` first, then `pred bbox -> VLM`.
+- Stage 3 is closed and frozen on GT-crop baseline (`qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock`).
+- Stage 4 is next: transition from `GT bbox -> VLM` to `pred bbox -> VLM`.
 - Current annotation progress is complete for prepared subsets:
   - pilot val: `40/40`
   - train batch: `200/200`
 - YOLO remains optional and non-blocking for the current milestone.
+
+Practical note: many sections below remain as planning history. The active execution focus now is Stage 4 integration work.
 
 ## Current repo status
 

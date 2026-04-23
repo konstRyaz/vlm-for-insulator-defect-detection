@@ -4,6 +4,12 @@ This Stage 3 baseline remains:
 
 `annotated GT crop dataset -> VLM -> parsed prediction -> vlm_labels_v1 mapping -> validation -> evaluation`
 
+Current freeze point:
+
+- prompt: `qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock`
+- reference run: `outputs/stage3_vlm_baseline_runs/stage3_qwen_val_v2_kaggle`
+- final prompt decision: `reports/stage3_v6d_vs_v6f_checkpoint.md`
+
 Recommended runtime is cloud notebook GPU:
 
 - primary: Kaggle
@@ -25,6 +31,10 @@ Prompt assets:
 - `configs/pipeline/prompts/stage3_vlm_user_v4_visibility_recalibrated.txt`
 - `configs/pipeline/prompts/stage3_vlm_system_v5_visibility_gate.txt`
 - `configs/pipeline/prompts/stage3_vlm_user_v5_visibility_gate.txt`
+- `configs/pipeline/prompts/stage3_vlm_system_v5a_visibility_gate_best.txt`
+- `configs/pipeline/prompts/stage3_vlm_user_v5a_visibility_gate_best.txt`
+- `configs/pipeline/prompts/stage3_vlm_system_v6d_balanced_notaglock.txt`
+- `configs/pipeline/prompts/stage3_vlm_user_v6d_balanced_notaglock.txt`
 
 Prompt version selection:
 
@@ -33,6 +43,7 @@ Prompt version selection:
 - calibrated visibility/tag tuning pass: `qwen_vlm_labels_v1_prompt_v3`
 - visibility recalibration pass: `qwen_vlm_labels_v1_prompt_v4`
 - visibility gate pass: `qwen_vlm_labels_v1_prompt_v5`
+- frozen Stage 3 version: `qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock`
 - CLI override: `--prompt-version <version>`
 
 Prediction contract mode: `reduced_subset_v1`
@@ -111,7 +122,7 @@ Full `val_v2` run:
 python scripts/run_stage3_vlm_baseline.py \
   --config configs/pipeline/stage3_vlm_gt_baseline.yaml \
   --backend-mode qwen_hf \
-  --prompt-version qwen_vlm_labels_v1_prompt_v5 \
+  --prompt-version qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock \
   --run-id stage3_qwen_val_v2 \
   --no-resume
 ```
@@ -187,3 +198,28 @@ Evaluation directory (`<run_dir>/eval` by default):
 - `failures.jsonl`
 - `confusion_coarse_class.csv`
 - `confusion_visibility.csv`
+
+## 7) Final visual package (graphs + tables)
+
+Build an extended visual/report package from eval artifacts:
+
+```bash
+python scripts/visualize_stage3_eval_results.py \
+  --eval-dir outputs/stage3_vlm_baseline_runs/<run_id>/eval
+```
+
+Optional: include prompt-sweep and final ablation summaries in the same report:
+
+```bash
+python scripts/visualize_stage3_eval_results.py \
+  --eval-dir outputs/stage3_vlm_baseline_runs/<run_id>/eval \
+  --sweep-csv reports/stage3_prompt_sweep_v6_checkpoint/prompt_sweep_comparison.csv \
+  --ablation-csv reports/stage3_v6d_vs_v6f_checkpoint/v6d_vs_v6f_comparison.csv
+```
+
+Generated files (default: `<run_id>/eval/visuals`) include:
+
+- core charts (KPI, confusion count/normalized, distributions, failure modes)
+- diagnostics (mismatch-by-group, text length, tag frequency/jaccard)
+- summary tables (`table_*.csv`)
+- final markdown report (`report.md`)

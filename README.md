@@ -2,16 +2,17 @@
 
 Minimal reproducible project for defect detection on power-line insulators.
 
-## Current project status (2026-04-22)
+## Current project status (2026-04-23)
 
 - Stage 2 is formally closed: Faster R-CNN baseline is frozen as `detector_baseline_v1`.
-- Stage 3 GT-crop VLM baseline is operational (Qwen2.5-VL) with full validation/evaluation artifacts.
+- Stage 3 is fixed as complete: GT-crop VLM baseline (Qwen2.5-VL) is frozen with final artifacts.
 - Annotation progress is complete for current subsets:
   - pilot val: `40/40`
   - train batch: `200/200`
-- Prompt calibration sweep (`v3/v4/v5a/v6*`) and final micro-ablation (`v6d` vs `v6f`) were completed.
-- Current frozen Stage 3 prompt: `qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock`.
-- Immediate next milestone: transition from `GT bbox -> VLM` to `pred bbox -> VLM` with frozen Stage 2 detector.
+- Prompt calibration sweep (`v3/v4/v5a/v6*`) and final micro-ablation (`v6d` vs `v6f`) are closed.
+- Frozen Stage 3 prompt: `qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock`.
+- Frozen Stage 3 reference run: `outputs/stage3_vlm_baseline_runs/stage3_qwen_val_v2_kaggle`.
+- Immediate next milestone: Stage 4 transition from `GT bbox -> VLM` to `pred bbox -> VLM` with frozen detector baseline.
 - YOLO remains optional later and is not a current blocking step.
 
 Key docs:
@@ -22,6 +23,7 @@ Key docs:
 - `docs/stage3_gt_bbox_to_vlm_plan.md`
 - `docs/stage3_pilot_quickstart.md`
 - `docs/stage3_vlm_baseline_quickstart.md`
+- `reports/stage3_final_visual_package.md`
 - `reports/stage3_prompt_sweep_v6_checkpoint.md`
 - `reports/stage3_v6d_vs_v6f_checkpoint.md`
 
@@ -182,12 +184,13 @@ python scripts/run_stage3_vlm_baseline.py \
   --no-resume
 ```
 
-### 11) Run full Stage 3 `val_v2` baseline (Qwen2.5-VL)
+### 11) Run full Stage 3 `val_v2` baseline (Qwen2.5-VL, frozen prompt)
 
 ```bash
 python scripts/run_stage3_vlm_baseline.py \
   --config configs/pipeline/stage3_vlm_gt_baseline.yaml \
   --backend-mode qwen_hf \
+  --prompt-version qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock \
   --run-id stage3_qwen_val_v2 \
   --no-resume
 ```
@@ -196,8 +199,17 @@ python scripts/run_stage3_vlm_baseline.py \
 
 ```bash
 python scripts/eval_stage3_vlm_baseline.py \
-  --run-dir outputs/stage3_vlm_baseline_runs/stage3_qwen_smoke_v1 \
+  --run-dir outputs/stage3_vlm_baseline_runs/stage3_qwen_val_v2 \
   --ground-truth-jsonl outputs/stage3_regrouped_v2/val/vlm_labels_v1_val_v2.annotated.jsonl
+```
+
+### 13) Build final Stage 3 visual package
+
+```bash
+python scripts/visualize_stage3_eval_results.py \
+  --eval-dir outputs/stage3_vlm_baseline_runs/stage3_qwen_val_v2/eval \
+  --sweep-csv reports/stage3_prompt_sweep_v6_checkpoint/prompt_sweep_comparison.csv \
+  --ablation-csv reports/stage3_v6d_vs_v6f_checkpoint/v6d_vs_v6f_comparison.csv
 ```
 
 Notebook-oriented Stage 3 quickstart (Kaggle primary, Colab fallback):
