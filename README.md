@@ -216,6 +216,17 @@ Notebook-oriented Stage 3 quickstart (Kaggle primary, Colab fallback):
 
 - `docs/stage3_vlm_baseline_quickstart.md`
 
+### 14) Run Stage 4 detector->VLM baseline on predicted boxes
+
+```bash
+python scripts/run_stage4_detector_to_vlm.py \
+  --config configs/stage4_detector_to_vlm_pred_val.yaml
+```
+
+Stage 4 quickstart:
+
+- `docs/stage4_detector_to_vlm_quickstart.md`
+
 ## What is saved
 
 - Hydra resolved config: `outputs/.../.hydra/`

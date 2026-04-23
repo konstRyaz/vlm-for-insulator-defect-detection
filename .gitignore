@@ -22,3 +22,6 @@ coverage.xml
 
 .DS_Store
 Thumbs.db
+
+# Local working notes
+notes/*.local.md

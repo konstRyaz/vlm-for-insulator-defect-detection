@@ -2,25 +2,38 @@
 from __future__ import annotations
 
 """
-Export GT bbox crops from COCO annotations for Stage 3 (GT bbox -> VLM).
+Export bbox crops and JSONL manifest for Stage 3/4 pipelines.
 
-Example:
+Supports:
+- GT boxes from COCO annotations (`--bbox-source gt`)
+- Predicted boxes from detector predictions JSON (`--bbox-source pred`)
+
+Examples:
 python scripts/export_vlm_crops.py \
+  --bbox-source gt \
   --coco-json data/processed/val/annotations.json \
   --images-dir data/processed/val/images \
   --output-dir outputs/stage3_gt_crops/val \
   --split val \
-  --padding-ratio 0.15 \
-  --include-categories defect_flashover defect_broken insulator_ok unknown \
-  --manifest-name manifest.jsonl \
-  --limit 50
+  --padding-ratio 0.15
+
+python scripts/export_vlm_crops.py \
+  --bbox-source pred \
+  --coco-json data/processed/val/annotations.json \
+  --images-dir data/processed/val/images \
+  --predictions-json outputs/infer/detector_baseline/predictions.json \
+  --score-threshold 0.30 \
+  --max-detections-per-image 50 \
+  --output-dir outputs/stage4/demo/02_pred_crops \
+  --split val \
+  --padding-ratio 0.15
 """
 
 import argparse
 import json
 import math
 import re
-from collections import Counter
+from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
 
@@ -29,12 +42,13 @@ from PIL import Image
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Export padded GT crops from COCO annotations and build a JSONL manifest."
+        description="Export padded crops and build a JSONL manifest from GT or predicted bboxes."
     )
+    parser.add_argument("--bbox-source", choices=["gt", "pred"], default="gt", help="Bounding-box source.")
     parser.add_argument("--coco-json", required=True, type=str, help="Path to COCO annotations JSON.")
     parser.add_argument("--images-dir", required=True, type=str, help="Directory containing source images.")
     parser.add_argument("--output-dir", required=True, type=str, help="Output directory for crops and manifests.")
-    parser.add_argument("--split", required=True, type=str, help="Split name to write into manifest (train/val/test).")
+    parser.add_argument("--split", required=True, type=str, help="Split name to write into manifest.")
     parser.add_argument(
         "--padding-ratio",
         type=float,
@@ -65,15 +79,32 @@ def parse_args() -> argparse.Namespace:
         default="summary.json",
         help="Summary file name under output-dir (default: summary.json).",
     )
+
+    parser.add_argument(
+        "--predictions-json",
+        type=str,
+        default=None,
+        help="Required when --bbox-source pred. Path to detector predictions JSON (COCO detections list).",
+    )
+    parser.add_argument(
+        "--score-threshold",
+        type=float,
+        default=0.0,
+        help="For --bbox-source pred: keep predictions with score >= threshold.",
+    )
+    parser.add_argument(
+        "--max-detections-per-image",
+        type=int,
+        default=None,
+        help="For --bbox-source pred: keep top-K detections per image by score.",
+    )
+
     return parser.parse_args()
 
 
-def load_json(path: Path) -> dict[str, Any]:
+def load_json(path: Path) -> Any:
     with path.open("r", encoding="utf-8") as f:
-        payload = json.load(f)
-    if not isinstance(payload, dict):
-        raise ValueError(f"Expected JSON object in {path}, got {type(payload).__name__}")
-    return payload
+        return json.load(f)
 
 
 def safe_category_name(name: str) -> str:
@@ -93,20 +124,21 @@ def as_float_bbox(raw_bbox: Any) -> list[float] | None:
     return [x, y, w, h]
 
 
+def xyxy_from_xywh(bbox_xywh: list[float]) -> list[float]:
+    x, y, w, h = bbox_xywh
+    return [x, y, x + w, y + h]
+
+
 def compute_clipped_xyxy(
     bbox_xywh: list[float],
     image_w: int,
     image_h: int,
     padding_ratio: float,
 ) -> list[int] | None:
-    x, y, w, h = bbox_xywh
-    x1 = x
-    y1 = y
-    x2 = x + w
-    y2 = y + h
+    x1, y1, x2, y2 = xyxy_from_xywh(bbox_xywh)
 
-    pad_x = w * padding_ratio
-    pad_y = h * padding_ratio
+    pad_x = bbox_xywh[2] * padding_ratio
+    pad_y = bbox_xywh[3] * padding_ratio
 
     x1_p = int(math.floor(x1 - pad_x))
     y1_p = int(math.floor(y1 - pad_y))
@@ -118,6 +150,17 @@ def compute_clipped_xyxy(
     x2_c = max(0, min(image_w, x2_p))
     y2_c = max(0, min(image_h, y2_p))
 
+    if x2_c <= x1_c or y2_c <= y1_c:
+        return None
+    return [x1_c, y1_c, x2_c, y2_c]
+
+
+def clip_xyxy_to_image(xyxy: list[float], image_w: int, image_h: int) -> list[float] | None:
+    x1, y1, x2, y2 = xyxy
+    x1_c = float(max(0, min(image_w, x1)))
+    y1_c = float(max(0, min(image_h, y1)))
+    x2_c = float(max(0, min(image_w, x2)))
+    y2_c = float(max(0, min(image_h, y2)))
     if x2_c <= x1_c or y2_c <= y1_c:
         return None
     return [x1_c, y1_c, x2_c, y2_c]
@@ -137,6 +180,93 @@ def to_posix_relative(path: Path, base: Path) -> str:
         return path.as_posix()
 
 
+def build_gt_rows(
+    annotations: list[dict[str, Any]],
+    category_name_by_id: dict[int, str],
+) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    sorted_annotations = sorted(
+        annotations,
+        key=lambda a: (int(a.get("image_id", -1)), int(a.get("id", -1))),
+    )
+    for ann in sorted_annotations:
+        try:
+            category_id = int(ann.get("category_id"))
+        except Exception:
+            category_id = -1
+        rows.append(
+            {
+                "image_id": ann.get("image_id"),
+                "ann_id": ann.get("id"),
+                "category_id": category_id,
+                "bbox": ann.get("bbox"),
+                "score": None,
+                "area": ann.get("area", None),
+                "iscrowd": ann.get("iscrowd", 0),
+                "category_name": category_name_by_id.get(category_id, ""),
+                "source_bbox_type": "gt",
+            }
+        )
+    return rows
+
+
+def build_pred_rows(
+    predictions: list[dict[str, Any]],
+    category_name_by_id: dict[int, str],
+    score_threshold: float,
+    max_detections_per_image: int | None,
+) -> list[dict[str, Any]]:
+    grouped: dict[int, list[dict[str, Any]]] = defaultdict(list)
+
+    for pred in predictions:
+        try:
+            image_id = int(pred.get("image_id"))
+            category_id = int(pred.get("category_id"))
+        except Exception:
+            continue
+
+        bbox = as_float_bbox(pred.get("bbox"))
+        if bbox is None:
+            continue
+
+        score_raw = pred.get("score", None)
+        score = None
+        if score_raw is not None:
+            try:
+                score = float(score_raw)
+            except (TypeError, ValueError):
+                score = None
+        if score is None:
+            score = 0.0
+
+        if score < score_threshold:
+            continue
+
+        grouped[image_id].append(
+            {
+                "image_id": image_id,
+                "ann_id": None,
+                "category_id": category_id,
+                "bbox": bbox,
+                "score": score,
+                "area": None,
+                "iscrowd": 0,
+                "category_name": category_name_by_id.get(category_id, f"category_{category_id}"),
+                "source_bbox_type": "pred",
+            }
+        )
+
+    rows: list[dict[str, Any]] = []
+    for image_id in sorted(grouped.keys()):
+        items = grouped[image_id]
+        items.sort(key=lambda p: (float(p.get("score", 0.0)), int(p.get("category_id", 0))), reverse=True)
+        if max_detections_per_image is not None:
+            items = items[:max_detections_per_image]
+        rows.extend(items)
+
+    return rows
+
+
 def main() -> None:
     args = parse_args()
 
@@ -152,8 +282,15 @@ def main() -> None:
         raise ValueError(f"padding-ratio must be >= 0, got {args.padding_ratio}")
     if args.limit is not None and args.limit <= 0:
         raise ValueError(f"limit must be positive, got {args.limit}")
+    if args.max_detections_per_image is not None and args.max_detections_per_image <= 0:
+        raise ValueError(f"max-detections-per-image must be positive, got {args.max_detections_per_image}")
+    if args.score_threshold < 0:
+        raise ValueError(f"score-threshold must be >= 0, got {args.score_threshold}")
 
     payload = load_json(coco_json)
+    if not isinstance(payload, dict):
+        raise ValueError(f"Expected JSON object in {coco_json}, got {type(payload).__name__}")
+
     images = payload.get("images", [])
     annotations = payload.get("annotations", [])
     categories = payload.get("categories", [])
@@ -199,21 +336,42 @@ def main() -> None:
     counters: Counter[str] = Counter()
     category_counter: Counter[str] = Counter()
 
-    exported = 0
-    sorted_annotations = sorted(
-        annotations,
-        key=lambda a: (int(a.get("image_id", -1)), int(a.get("id", -1))),
-    )
+    rows: list[dict[str, Any]]
+    predictions_path: Path | None = None
 
+    if args.bbox_source == "gt":
+        rows = build_gt_rows(annotations=annotations, category_name_by_id=category_name_by_id)
+    else:
+        if not args.predictions_json:
+            raise ValueError("--predictions-json is required when --bbox-source pred")
+        predictions_path = Path(args.predictions_json)
+        if not predictions_path.exists():
+            raise FileNotFoundError(f"Predictions JSON not found: {predictions_path}")
+        preds_payload = load_json(predictions_path)
+        if not isinstance(preds_payload, list):
+            raise ValueError(
+                f"Expected JSON list in predictions file {predictions_path}, got {type(preds_payload).__name__}"
+            )
+        rows = build_pred_rows(
+            predictions=[item for item in preds_payload if isinstance(item, dict)],
+            category_name_by_id=category_name_by_id,
+            score_threshold=float(args.score_threshold),
+            max_detections_per_image=args.max_detections_per_image,
+        )
+
+    # deterministic local index for predicted boxes per image
+    pred_local_counter: dict[int, int] = defaultdict(int)
+
+    exported = 0
     with manifest_path.open("w", encoding="utf-8") as manifest_f:
-        for ann in sorted_annotations:
+        for row in rows:
             if args.limit is not None and exported >= args.limit:
                 break
 
-            counters["annotations_seen"] += 1
+            counters["rows_seen"] += 1
 
             try:
-                image_id = int(ann["image_id"])
+                image_id = int(row.get("image_id"))
             except Exception:
                 counters["skipped_invalid_image_id"] += 1
                 continue
@@ -224,17 +382,17 @@ def main() -> None:
                 continue
 
             try:
-                category_id = int(ann["category_id"])
+                category_id = int(row.get("category_id"))
             except Exception:
                 counters["skipped_invalid_category_id"] += 1
                 continue
 
-            category_name = category_name_by_id.get(category_id, f"category_{category_id}")
+            category_name = str(row.get("category_name") or category_name_by_id.get(category_id, f"category_{category_id}"))
             if include_categories and category_name not in include_categories:
                 counters["skipped_by_category_filter"] += 1
                 continue
 
-            bbox_xywh = as_float_bbox(ann.get("bbox"))
+            bbox_xywh = as_float_bbox(row.get("bbox"))
             if bbox_xywh is None:
                 counters["skipped_invalid_bbox"] += 1
                 continue
@@ -254,23 +412,37 @@ def main() -> None:
                     image = image.convert("RGB")
                     image_w, image_h = image.size
 
-                    bbox_xyxy = compute_clipped_xyxy(
+                    bbox_xyxy_raw = xyxy_from_xywh(bbox_xywh)
+                    bbox_xyxy_clipped = clip_xyxy_to_image(bbox_xyxy_raw, image_w=image_w, image_h=image_h)
+                    if bbox_xyxy_clipped is None:
+                        counters["skipped_invalid_bbox_after_clip"] += 1
+                        continue
+
+                    bbox_xyxy_for_crop = compute_clipped_xyxy(
                         bbox_xywh=bbox_xywh,
                         image_w=image_w,
                         image_h=image_h,
                         padding_ratio=float(args.padding_ratio),
                     )
-                    if bbox_xyxy is None:
+                    if bbox_xyxy_for_crop is None:
                         counters["skipped_empty_crop_after_clip"] += 1
                         continue
 
-                    x1, y1, x2, y2 = bbox_xyxy
+                    x1, y1, x2, y2 = bbox_xyxy_for_crop
                     crop = image.crop((x1, y1, x2, y2))
                     crop_w, crop_h = crop.size
 
-                    ann_id = ann.get("id")
-                    ann_id_text = str(ann_id) if ann_id is not None else f"noid_{counters['annotations_seen']}"
-                    record_id = f"{args.split}_img{image_id}_ann{ann_id_text}"
+                    if args.bbox_source == "gt":
+                        ann_id = row.get("ann_id")
+                        ann_id_text = str(ann_id) if ann_id is not None else f"noid_{counters['rows_seen']}"
+                        box_id = f"ann{ann_id_text}"
+                        record_id = f"{args.split}_img{image_id}_{box_id}"
+                    else:
+                        pred_local_counter[image_id] += 1
+                        pred_idx = pred_local_counter[image_id]
+                        box_id = f"pred{pred_idx}"
+                        record_id = f"{args.split}_img{image_id}_{box_id}"
+                        ann_id = None
 
                     category_dir = crops_root / safe_category_name(category_name)
                     category_dir.mkdir(parents=True, exist_ok=True)
@@ -282,26 +454,47 @@ def main() -> None:
                 counters["skipped_unreadable_image"] += 1
                 continue
 
-            record = {
+            source = "gt" if args.bbox_source == "gt" else "pred"
+            score_value = row.get("score", None)
+            score_out = float(score_value) if isinstance(score_value, (int, float)) else None
+            area = float(row.get("area")) if isinstance(row.get("area"), (int, float)) else float(bbox_xywh[2] * bbox_xywh[3])
+            iscrowd = int(row.get("iscrowd", 0)) if args.bbox_source == "gt" else 0
+
+            record: dict[str, Any] = {
                 "record_id": record_id,
-                "source": "gt",
+                "source": source,
                 "split": str(args.split),
                 "image_id": image_id,
                 "image_path": to_posix_relative(image_path, images_dir),
                 "ann_id": ann_id,
-                "box_id": f"ann{ann_id_text}",
+                "box_id": box_id,
                 "bbox_xywh": [float(v) for v in bbox_xywh],
-                "bbox_xyxy": bbox_xyxy,
+                "bbox_xyxy": [float(v) for v in bbox_xyxy_clipped],
                 "category_id": category_id,
                 "category_name": category_name,
                 "crop_path": to_posix_relative(crop_path, output_dir),
                 "padding_ratio": float(args.padding_ratio),
                 "width": int(crop_w),
                 "height": int(crop_h),
-                "area": float(ann.get("area", bbox_xywh[2] * bbox_xywh[3])),
-                "iscrowd": int(ann.get("iscrowd", 0)),
+                "area": area,
+                "iscrowd": iscrowd,
+                "score": score_out,
+                "label_version": "vlm_labels_v1",
                 "vlm_labels_v1": None,
             }
+
+            if args.bbox_source == "pred":
+                record.update(
+                    {
+                        "source_bbox_type": "pred",
+                        "parent_image_id": image_id,
+                        "pred_box_id": box_id,
+                        "pred_box_xyxy": [float(v) for v in bbox_xyxy_clipped],
+                        "detector_score": score_out,
+                        "detector_class_name": category_name,
+                    }
+                )
+
             manifest_f.write(json.dumps(record, ensure_ascii=False) + "\n")
 
             counters["exported"] += 1
@@ -310,18 +503,22 @@ def main() -> None:
 
     summary = {
         "input": {
+            "bbox_source": args.bbox_source,
             "coco_json": str(coco_json),
             "images_dir": str(images_dir),
+            "predictions_json": str(predictions_path) if predictions_path is not None else None,
             "output_dir": str(output_dir),
             "split": str(args.split),
             "padding_ratio": float(args.padding_ratio),
+            "score_threshold": float(args.score_threshold),
+            "max_detections_per_image": args.max_detections_per_image,
             "include_categories": sorted(include_categories) if include_categories else None,
             "limit": args.limit,
             "manifest_name": str(args.manifest_name),
         },
         "totals": {
             "exported_crops": int(counters.get("exported", 0)),
-            "annotations_seen": int(counters.get("annotations_seen", 0)),
+            "rows_seen": int(counters.get("rows_seen", 0)),
         },
         "by_category": {k: int(v) for k, v in sorted(category_counter.items())},
         "counters": {k: int(v) for k, v in sorted(counters.items())},
@@ -342,4 +539,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
