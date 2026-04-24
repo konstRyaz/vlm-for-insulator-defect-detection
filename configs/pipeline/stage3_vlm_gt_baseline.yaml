@@ -116,6 +116,18 @@ prompt:
     qwen_vlm_labels_v1_prompt_v6f_balanced_notaglock_soft_ambiguous_raise_nocroppath:
       system_path: configs/pipeline/prompts/stage3_vlm_system_v6f_balanced_notaglock_soft_ambiguous_raise.txt
       user_path: configs/pipeline/prompts/stage3_vlm_user_v6f_balanced_notaglock_soft_ambiguous_raise_nocroppath.txt
+    qwen_vlm_labels_v1_prompt_v7a_ok_requires_positive_intact_nocroppath:
+      system_path: configs/pipeline/prompts/stage3_vlm_system_v7a_ok_requires_positive_intact.txt
+      user_path: configs/pipeline/prompts/stage3_vlm_user_v6d_balanced_notaglock_nocroppath.txt
+    qwen_vlm_labels_v1_prompt_v7b_flashover_object_bound_nocroppath:
+      system_path: configs/pipeline/prompts/stage3_vlm_system_v7b_flashover_object_bound.txt
+      user_path: configs/pipeline/prompts/stage3_vlm_user_v6d_balanced_notaglock_nocroppath.txt
+    qwen_vlm_labels_v1_prompt_v7c_broken_fragment_support_nocroppath:
+      system_path: configs/pipeline/prompts/stage3_vlm_system_v7c_broken_fragment_support.txt
+      user_path: configs/pipeline/prompts/stage3_vlm_user_v6d_balanced_notaglock_nocroppath.txt
+    qwen_vlm_labels_v1_prompt_v7d_balanced_coarse_recovery_nocroppath:
+      system_path: configs/pipeline/prompts/stage3_vlm_system_v7d_balanced_coarse_recovery.txt
+      user_path: configs/pipeline/prompts/stage3_vlm_user_v6d_balanced_notaglock_nocroppath.txt
   system_path: configs/pipeline/prompts/stage3_vlm_system_v6d_balanced_notaglock.txt
   user_path: configs/pipeline/prompts/stage3_vlm_user_v6d_balanced_notaglock_nocroppath.txt
 

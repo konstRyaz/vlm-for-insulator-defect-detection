@@ -586,6 +586,347 @@ def build_stage3_clean_micro() -> None:
     save_nb(NOTEBOOKS_DIR / "stage3_final_micro_ablation_v6d_vs_v6f_clean.ipynb", nb)
 
 
+def build_stage3_coarse_recovery_sweep() -> None:
+    nb = load_nb(NOTEBOOKS_DIR / "stage3_prompt_sweep_visibility_v6_clean.ipynb")
+    nb["cells"][0]["source"] = src(
+        "# Stage 3 Prompt Sweep Clean (Coarse Recovery v7, Kaggle)\n\n"
+        "Leakage-free full-val coarse-class recovery sweep on Qwen2.5-VL-3B-Instruct. "
+        "It keeps the clean `_nocroppath` path, uses `v6d_nocroppath` as control, and tests four small coarse-policy variants aimed at recovering defect-vs-ok discrimination without sacrificing the improved visibility calibration.\n"
+    )
+    nb["cells"][1]["source"] = src(
+        "import json\n"
+        "import shutil\n"
+        "import subprocess\n"
+        "from pathlib import Path\n\n"
+        "import pandas as pd\n\n"
+        'REPO_URL = "https://github.com/konstRyaz/vlm-for-insulator-defect-detection.git"\n'
+        'REPO_DIR = Path("/kaggle/working/vlm-for-insulator-defect-detection")\n\n'
+        "DATASET_ROOT_CANDIDATES = [\n"
+        '    Path("/kaggle/input/datasets/kostyaryazanov/idid-coco-v3"),\n'
+        '    Path("/kaggle/input/idid-coco-v3"),\n'
+        "]\n"
+        'JSONL_REL = Path("stage3_regrouped_v2/val/vlm_labels_v1_val_v2.annotated.jsonl")\n\n'
+        'BACKEND_MODE = "qwen_hf"\n'
+        'RUN_ID_PREFIX = "stage3_qwen_val_v2_sweep_v7_coarse_clean"\n\n'
+        "PROMPT_VERSIONS = [\n"
+        '    "qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock_nocroppath",\n'
+        '    "qwen_vlm_labels_v1_prompt_v7a_ok_requires_positive_intact_nocroppath",\n'
+        '    "qwen_vlm_labels_v1_prompt_v7b_flashover_object_bound_nocroppath",\n'
+        '    "qwen_vlm_labels_v1_prompt_v7c_broken_fragment_support_nocroppath",\n'
+        '    "qwen_vlm_labels_v1_prompt_v7d_balanced_coarse_recovery_nocroppath",\n'
+        "]\n\n"
+        'CONTROL_VERSION = "qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock_nocroppath"\n\n'
+        'print("Prompt sweep size:", len(PROMPT_VERSIONS))\n'
+        "from IPython.display import display\n"
+    )
+    nb["cells"][2]["source"] = src(
+        "def sh(cmd: str, cwd: Path | None = None, check: bool = True):\n"
+        "    print(f\"$ {cmd}\")\n"
+        "    p = subprocess.run(\n"
+        "        cmd,\n"
+        "        shell=True,\n"
+        "        cwd=str(cwd) if cwd else None,\n"
+        "        text=True,\n"
+        "        capture_output=True,\n"
+        "    )\n"
+        "    if p.stdout:\n"
+        "        print(p.stdout)\n"
+        "    if p.stderr:\n"
+        "        print(p.stderr)\n"
+        "    if check and p.returncode != 0:\n"
+        "        raise RuntimeError(f\"Command failed ({p.returncode}): {cmd}\")\n"
+        "    return p\n\n"
+        "def require_path(path: Path, label: str):\n"
+        "    if not path.exists():\n"
+        "        raise FileNotFoundError(f\"{label} not found: {path}\")\n"
+        "    return path\n\n"
+        "def read_json(path: Path):\n"
+        "    return json.loads(path.read_text(encoding=\"utf-8\"))\n\n"
+        "def metrics_row(prompt_version: str, run_id: str, run_dir: Path, eval_dir: Path) -> dict:\n"
+        "    metrics = read_json(eval_dir / \"metrics.json\")\n"
+        "    run_summary = read_json(run_dir / \"run_summary.json\")\n"
+        "    rates = metrics.get(\"rates\", {})\n"
+        "    f1 = metrics.get(\"f1\", {})\n\n"
+        "    row = {\n"
+        "        \"prompt_version\": prompt_version,\n"
+        "        \"run_id\": run_id,\n"
+        "        \"parse_success\": float(rates.get(\"parse_success_rate\", 0.0)),\n"
+        "        \"schema_valid\": float(rates.get(\"schema_valid_rate\", 0.0)),\n"
+        "        \"coarse_acc\": float(rates.get(\"coarse_class_accuracy\", 0.0)),\n"
+        "        \"coarse_macro_f1\": float(f1.get(\"coarse_class_macro_f1\", 0.0)),\n"
+        "        \"visibility_acc\": float(rates.get(\"visibility_accuracy\", 0.0)),\n"
+        "        \"visibility_macro_f1\": float(f1.get(\"visibility_macro_f1\", 0.0)),\n"
+        "        \"needs_review_acc\": float(rates.get(\"needs_review_accuracy\", 0.0)),\n"
+        "        \"tag_exact\": float(rates.get(\"tag_exact_match_rate\", 0.0)),\n"
+        "        \"tag_mean_jaccard\": float(rates.get(\"tag_mean_jaccard\", 0.0)),\n"
+        "        \"pred_ambiguous_rate\": float(rates.get(\"pred_ambiguous_rate\", 0.0)),\n"
+        "        \"gt_ambiguous_rate\": float(rates.get(\"gt_ambiguous_rate\", 0.0)),\n"
+        "        \"backend\": run_summary.get(\"backend_mode_effective\"),\n"
+        "        \"model\": run_summary.get(\"backend_settings_effective\", {}).get(\"model\"),\n"
+        "    }\n"
+        "    row[\"abs_ambiguous_gap\"] = abs(row[\"pred_ambiguous_rate\"] - row[\"gt_ambiguous_rate\"])\n"
+        "    return row\n\n"
+        "def pass_rule(row: dict, control_row: dict) -> bool:\n"
+        "    return (\n"
+        "        row[\"parse_success\"] == 1.0\n"
+        "        and row[\"schema_valid\"] == 1.0\n"
+        "        and row[\"coarse_macro_f1\"] >= (control_row[\"coarse_macro_f1\"] + 0.04)\n"
+        "        and row[\"coarse_acc\"] >= (control_row[\"coarse_acc\"] + 0.02)\n"
+        "        and row[\"visibility_macro_f1\"] >= (control_row[\"visibility_macro_f1\"] - 0.03)\n"
+        "        and row[\"tag_mean_jaccard\"] >= (control_row[\"tag_mean_jaccard\"] - 0.015)\n"
+        "    )\n\n"
+        "def soft_pass_rule(row: dict, control_row: dict) -> bool:\n"
+        "    return (\n"
+        "        row[\"parse_success\"] == 1.0\n"
+        "        and row[\"schema_valid\"] == 1.0\n"
+        "        and row[\"coarse_macro_f1\"] > (control_row[\"coarse_macro_f1\"] + 0.015)\n"
+        "        and row[\"coarse_acc\"] >= (control_row[\"coarse_acc\"] - 0.02)\n"
+        "        and row[\"visibility_macro_f1\"] >= (control_row[\"visibility_macro_f1\"] - 0.05)\n"
+        "    )\n"
+    )
+    nb["cells"][5]["source"] = src(
+        "# 3) Hard preflight checks: registry wiring + clean content fingerprints per version\n"
+        "import yaml\n\n"
+        'cfg_path = REPO_DIR / "configs" / "pipeline" / "stage3_vlm_gt_baseline.yaml"\n'
+        'cfg = yaml.safe_load(cfg_path.read_text(encoding="utf-8"))\n'
+        'versions = cfg["prompt"]["versions"]\n\n'
+        "expected_paths = {\n"
+        '    "qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock_nocroppath": (\n'
+        '        "configs/pipeline/prompts/stage3_vlm_system_v6d_balanced_notaglock.txt",\n'
+        '        "configs/pipeline/prompts/stage3_vlm_user_v6d_balanced_notaglock_nocroppath.txt",\n'
+        "    ),\n"
+        '    "qwen_vlm_labels_v1_prompt_v7a_ok_requires_positive_intact_nocroppath": (\n'
+        '        "configs/pipeline/prompts/stage3_vlm_system_v7a_ok_requires_positive_intact.txt",\n'
+        '        "configs/pipeline/prompts/stage3_vlm_user_v6d_balanced_notaglock_nocroppath.txt",\n'
+        "    ),\n"
+        '    "qwen_vlm_labels_v1_prompt_v7b_flashover_object_bound_nocroppath": (\n'
+        '        "configs/pipeline/prompts/stage3_vlm_system_v7b_flashover_object_bound.txt",\n'
+        '        "configs/pipeline/prompts/stage3_vlm_user_v6d_balanced_notaglock_nocroppath.txt",\n'
+        "    ),\n"
+        '    "qwen_vlm_labels_v1_prompt_v7c_broken_fragment_support_nocroppath": (\n'
+        '        "configs/pipeline/prompts/stage3_vlm_system_v7c_broken_fragment_support.txt",\n'
+        '        "configs/pipeline/prompts/stage3_vlm_user_v6d_balanced_notaglock_nocroppath.txt",\n'
+        "    ),\n"
+        '    "qwen_vlm_labels_v1_prompt_v7d_balanced_coarse_recovery_nocroppath": (\n'
+        '        "configs/pipeline/prompts/stage3_vlm_system_v7d_balanced_coarse_recovery.txt",\n'
+        '        "configs/pipeline/prompts/stage3_vlm_user_v6d_balanced_notaglock_nocroppath.txt",\n'
+        "    ),\n"
+        "}\n\n"
+        "ok_gate_sentence = 'Absence of obvious defect alone is not sufficient for insulator_ok.'\n"
+        "flash_sentence = 'A localized object-bound dark trace can support defect_flashover even if the rest of the crop looks regular.'\n"
+        "broken_sentence = 'A direct edge or profile discontinuity on the visible fragment can support defect_broken even when only part of the object is shown.'\n"
+        "taglock_line = 'If visibility=\"ambiguous\", ensure the tags explain why.'\n\n"
+        "pattern_rules = {\n"
+        '    "qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock_nocroppath": {\n'
+        '        "sys_must": [\n'
+        '            "Do not use visibility=\\"ambiguous\\" only because defect evidence is weak, absent, or conservative while the visible region remains readable.",\n'
+        '            "If the visible evidence itself cannot be trusted due to blur, glare, washout, low contrast, heavy shadow, or unstable boundaries, prefer visibility=\\"ambiguous\\" even when a conservative coarse_class guess is still possible.",\n'
+        "        ],\n"
+        '        "usr_must": [],\n'
+        '        "sys_must_not": [ok_gate_sentence, flash_sentence, broken_sentence],\n'
+        '        "usr_must_not": [taglock_line, "crop_path"],\n'
+        "    },\n"
+        '    "qwen_vlm_labels_v1_prompt_v7a_ok_requires_positive_intact_nocroppath": {\n'
+        '        "sys_must": [ok_gate_sentence],\n'
+        '        "usr_must": [],\n'
+        '        "sys_must_not": [flash_sentence, broken_sentence],\n'
+        '        "usr_must_not": [taglock_line, "crop_path"],\n'
+        "    },\n"
+        '    "qwen_vlm_labels_v1_prompt_v7b_flashover_object_bound_nocroppath": {\n'
+        '        "sys_must": [flash_sentence],\n'
+        '        "usr_must": [],\n'
+        '        "sys_must_not": [ok_gate_sentence, broken_sentence],\n'
+        '        "usr_must_not": [taglock_line, "crop_path"],\n'
+        "    },\n"
+        '    "qwen_vlm_labels_v1_prompt_v7c_broken_fragment_support_nocroppath": {\n'
+        '        "sys_must": [broken_sentence],\n'
+        '        "usr_must": [],\n'
+        '        "sys_must_not": [ok_gate_sentence, flash_sentence],\n'
+        '        "usr_must_not": [taglock_line, "crop_path"],\n'
+        "    },\n"
+        '    "qwen_vlm_labels_v1_prompt_v7d_balanced_coarse_recovery_nocroppath": {\n'
+        '        "sys_must": [ok_gate_sentence, flash_sentence, broken_sentence],\n'
+        '        "usr_must": [],\n'
+        '        "sys_must_not": [],\n'
+        '        "usr_must_not": [taglock_line, "crop_path"],\n'
+        "    },\n"
+        "}\n\n"
+        "for pv in PROMPT_VERSIONS:\n"
+        "    if pv not in versions:\n"
+        '        raise RuntimeError(f"Prompt version missing in config: {pv}")\n\n'
+        "    expected_sys, expected_usr = expected_paths[pv]\n"
+        '    actual_sys = versions[pv]["system_path"]\n'
+        '    actual_usr = versions[pv]["user_path"]\n\n'
+        "    if actual_sys != expected_sys or actual_usr != expected_usr:\n"
+        "        raise RuntimeError(\n"
+        '            f"Registry mismatch for {pv}: expected ({expected_sys}, {expected_usr}), got ({actual_sys}, {actual_usr})"\n'
+        "        )\n\n"
+        "    sys_abs = REPO_DIR / actual_sys\n"
+        "    usr_abs = REPO_DIR / actual_usr\n"
+        '    require_path(sys_abs, f"system prompt for {pv}")\n'
+        '    require_path(usr_abs, f"user prompt for {pv}")\n\n'
+        '    sys_text = sys_abs.read_text(encoding="utf-8")\n'
+        '    usr_text = usr_abs.read_text(encoding="utf-8")\n'
+        '    if "crop_path" in usr_text:\n'
+        '        raise RuntimeError(f"Clean user prompt still exposes crop_path: {pv}")\n\n'
+        "    rules = pattern_rules[pv]\n"
+        '    for pattern in rules.get("sys_must", []):\n'
+        "        if pattern not in sys_text:\n"
+        '            raise RuntimeError(f"Pattern missing in system prompt {pv}: {pattern}")\n'
+        '    for pattern in rules.get("usr_must", []):\n'
+        "        if pattern not in usr_text:\n"
+        '            raise RuntimeError(f"Pattern missing in user prompt {pv}: {pattern}")\n'
+        '    for pattern in rules.get("sys_must_not", []):\n'
+        "        if pattern in sys_text:\n"
+        '            raise RuntimeError(f"Forbidden pattern in system prompt {pv}: {pattern}")\n'
+        '    for pattern in rules.get("usr_must_not", []):\n'
+        "        if pattern in usr_text:\n"
+        '            raise RuntimeError(f"Forbidden pattern in user prompt {pv}: {pattern}")\n\n'
+        'print("Coarse-recovery clean prompt preflight checks passed for all sweep variants.")\n'
+    )
+    nb["cells"][7]["source"] = src(
+        "# 5) Aggregate + rank + PASS/SOFT_PASS/FAIL\n"
+        "if not all_rows:\n"
+        "    raise RuntimeError('No sweep rows collected.')\n\n"
+        "df = pd.DataFrame(all_rows)\n\n"
+        "control_matches = df[df['prompt_version'] == CONTROL_VERSION]\n"
+        "if control_matches.empty:\n"
+        "    raise RuntimeError(f'Control version not found in sweep rows: {CONTROL_VERSION}')\n"
+        "control_row = control_matches.iloc[0].to_dict()\n\n"
+        "verdicts = []\n"
+        "for _, r in df.iterrows():\n"
+        "    row = r.to_dict()\n"
+        "    if pass_rule(row, control_row):\n"
+        "        verdicts.append('PASS')\n"
+        "    elif soft_pass_rule(row, control_row):\n"
+        "        verdicts.append('SOFT_PASS')\n"
+        "    else:\n"
+        "        verdicts.append('FAIL')\n\n"
+        "df['verdict'] = verdicts\n\n"
+        "# Ranking rule:\n"
+        "# 1) highest coarse_macro_f1\n"
+        "# 2) highest coarse_acc\n"
+        "# 3) highest tag_mean_jaccard\n"
+        "# 4) highest visibility_macro_f1\n"
+        "ranked = df.sort_values(\n"
+        "    by=['coarse_macro_f1', 'coarse_acc', 'tag_mean_jaccard', 'visibility_macro_f1'],\n"
+        "    ascending=[False, False, False, False],\n"
+        ").reset_index(drop=True)\n"
+        "ranked['rank'] = ranked.index + 1\n\n"
+        "best = ranked.iloc[0].to_dict()\n\n"
+        "AGG_DIR = REPO_DIR / 'outputs' / 'stage3_vlm_baseline_runs' / f'{RUN_ID_PREFIX}_aggregate'\n"
+        "AGG_DIR.mkdir(parents=True, exist_ok=True)\n\n"
+        "agg_csv = AGG_DIR / 'prompt_sweep_comparison.csv'\n"
+        "agg_md = AGG_DIR / 'prompt_sweep_comparison.md'\n"
+        "ranked.to_csv(agg_csv, index=False)\n\n"
+        "def to_markdown_table(df_in: pd.DataFrame) -> str:\n"
+        "    cols = list(df_in.columns)\n"
+        "    lines = []\n"
+        "    lines.append('| ' + ' | '.join(cols) + ' |')\n"
+        "    lines.append('| ' + ' | '.join(['---'] * len(cols)) + ' |')\n"
+        "    for _, rr in df_in.iterrows():\n"
+        "        vals = []\n"
+        "        for c in cols:\n"
+        "            v = rr[c]\n"
+        "            if isinstance(v, float):\n"
+        "                vals.append(f'{v:.6f}')\n"
+        "            else:\n"
+        "                vals.append(str(v))\n"
+        "        lines.append('| ' + ' | '.join(vals) + ' |')\n"
+        "    return '\\n'.join(lines)\n\n"
+        "md_lines = [\n"
+        "    '# Stage 3 Prompt Sweep Comparison (Coarse Recovery v7)',\n"
+        "    '',\n"
+        "    f'- control_version: `{CONTROL_VERSION}`',\n"
+        "    f'- best_prompt_version: `{best[\"prompt_version\"]}`',\n"
+        "    f'- best_run_id: `{best[\"run_id\"]}`',\n"
+        "    f'- best_verdict: `{best[\"verdict\"]}`',\n"
+        "    '',\n"
+        "    to_markdown_table(ranked),\n"
+        "]\n"
+        "agg_md.write_text('\\n'.join(md_lines), encoding='utf-8')\n\n"
+        "print('Aggregate CSV:', agg_csv)\n"
+        "print('Aggregate MD:', agg_md)\n"
+        "print('\\n=== BEST CANDIDATE ===')\n"
+        "for k in ['prompt_version', 'run_id', 'verdict', 'coarse_macro_f1', 'coarse_acc', 'tag_mean_jaccard', 'visibility_macro_f1']:\n"
+        "    print(f'{k}: {best[k]}')\n\n"
+        "display(ranked)\n"
+    )
+    nb["cells"][8]["source"] = src(
+        "# 6) Package sweep deliverables\n"
+        'DELIVER_DIR = Path(f"/kaggle/working/stage3_deliverables_{RUN_ID_PREFIX}")\n'
+        "if DELIVER_DIR.exists():\n"
+        "    shutil.rmtree(DELIVER_DIR)\n"
+        "DELIVER_DIR.mkdir(parents=True, exist_ok=True)\n\n"
+        "for p in [AGG_DIR / 'prompt_sweep_comparison.csv', AGG_DIR / 'prompt_sweep_comparison.md']:\n"
+        "    if p.exists():\n"
+        '        dst = DELIVER_DIR / "aggregate" / p.name\n'
+        "        dst.parent.mkdir(parents=True, exist_ok=True)\n"
+        "        shutil.copy2(p, dst)\n\n"
+        "run_artifacts_rel = [\n"
+        '    "run_summary.json",\n'
+        '    "config_snapshot.json",\n'
+        '    "predictions_vlm_labels_v1.jsonl",\n'
+        '    "parsed_predictions.jsonl",\n'
+        '    "raw_responses.jsonl",\n'
+        '    "sample_results.jsonl",\n'
+        '    "failures.jsonl",\n'
+        '    "eval/metrics.json",\n'
+        '    "eval/confusion_coarse_class.csv",\n'
+        '    "eval/confusion_visibility.csv",\n'
+        '    "eval/review_table.csv",\n'
+        '    "eval/failures.jsonl",\n'
+        '    "eval/visuals/report.md",\n'
+        '    "eval/visuals/kpi_overview.png",\n'
+        '    "eval/visuals/confusion_coarse_class.png",\n'
+        '    "eval/visuals/confusion_visibility.png",\n'
+        '    "eval/visuals/visibility_errors_top.csv",\n'
+        '    "eval/visuals/visibility_errors_gallery.png",\n'
+        "]\n\n"
+        "for pv in PROMPT_VERSIONS:\n"
+        "    run_dir = run_dirs[pv]\n"
+        "    for rel in run_artifacts_rel:\n"
+        "        src_path = run_dir / rel\n"
+        "        if src_path.exists():\n"
+        '            dst = DELIVER_DIR / "runs" / pv / rel\n'
+        "            dst.parent.mkdir(parents=True, exist_ok=True)\n"
+        "            shutil.copy2(src_path, dst)\n\n"
+        'summary_md = DELIVER_DIR / "RESULT_SUMMARY.md"\n'
+        "summary_md.write_text(\n"
+        '    "\\n".join([\n'
+        '        f"# Stage 3 Clean Coarse-Recovery Sweep Result: {RUN_ID_PREFIX}",\n'
+        '        "",\n'
+        '        "- model: Qwen/Qwen2.5-VL-3B-Instruct",\n'
+        '        f"- backend: {BACKEND_MODE}",\n'
+        '        f"- control_version: {CONTROL_VERSION}",\n'
+        '        f"- prompt_count: {len(PROMPT_VERSIONS)}",\n'
+        '        f"- best_prompt_version: {best[\'prompt_version\']}",\n'
+        '        f"- best_run_id: {best[\'run_id\']}",\n'
+        '        f"- best_verdict: {best[\'verdict\']}",\n'
+        '        "",\n'
+        '        f"Ground truth JSONL: {VAL_JSONL}",\n'
+        '        f"Repo commit: {git_head}",\n'
+        "    ]),\n"
+        '    encoding="utf-8",\n'
+        ")\n\n"
+        'ARCHIVE_BASE = Path(f"/kaggle/working/stage3_deliverables_{RUN_ID_PREFIX}")\n'
+        'ARCHIVE_PATH = shutil.make_archive(str(ARCHIVE_BASE), "gztar", root_dir=DELIVER_DIR)\n\n'
+        'print("DELIVER_DIR:", DELIVER_DIR)\n'
+        'print("ARCHIVE_PATH:", ARCHIVE_PATH)\n'
+        'print("\\nFiles in deliverables:")\n'
+        'for p in sorted(DELIVER_DIR.rglob("*")):\n'
+        "    if p.is_file():\n"
+        '        print("-", p.relative_to(DELIVER_DIR))\n'
+    )
+    nb["cells"][9]["source"] = src(
+        "## Artifacts\n\n"
+        "Per-run outputs: `outputs/stage3_vlm_baseline_runs/<RUN_ID_PREFIX>...`\n"
+        "Aggregate files: `.../<RUN_ID_PREFIX>_aggregate/`\n"
+        "Packed archive: `/kaggle/working/stage3_deliverables_stage3_qwen_val_v2_sweep_v7_coarse_clean.tar.gz`\n"
+    )
+    save_nb(NOTEBOOKS_DIR / "stage3_prompt_sweep_coarse_v7_clean.ipynb", nb)
+
+
 def patch_stage4_notebook() -> None:
     nb = load_nb(NOTEBOOKS_DIR / "stage4_detector_to_vlm_kaggle_run.ipynb")
     nb["cells"][0]["source"] = src(
@@ -802,6 +1143,7 @@ def main() -> None:
     build_stage3_clean_onepass()
     build_stage3_clean_sweep()
     build_stage3_clean_micro()
+    build_stage3_coarse_recovery_sweep()
     patch_stage4_notebook()
     print("Clean rerun notebooks generated.")
 
