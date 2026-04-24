@@ -1022,6 +1022,7 @@ def main() -> None:
 
     system_prompt = read_text(system_prompt_path)
     user_prompt_template = read_text(user_prompt_path)
+    user_prompt_contains_crop_path_token = "{{crop_path}}" in user_prompt_template or "crop_path" in user_prompt_template
 
     (run_dir / "prompts").mkdir(parents=True, exist_ok=True)
     (run_dir / "prompts" / "system.txt").write_text(system_prompt, encoding="utf-8")
@@ -1037,6 +1038,7 @@ def main() -> None:
             "selected_version": selected_prompt_version,
             "system_prompt_path": str(system_prompt_path),
             "user_prompt_path": str(user_prompt_path),
+            "user_prompt_contains_crop_path_token": user_prompt_contains_crop_path_token,
         },
         "prediction_contract": prediction_contract,
         "config": cfg,
@@ -1243,6 +1245,7 @@ def main() -> None:
             "selected_version": selected_prompt_version,
             "system_prompt_path": str(system_prompt_path),
             "user_prompt_path": str(user_prompt_path),
+            "user_prompt_contains_crop_path_token": user_prompt_contains_crop_path_token,
         },
         "prediction_contract": prediction_contract,
         "input_selection": {

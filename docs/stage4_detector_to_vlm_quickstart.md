@@ -11,6 +11,8 @@ Current clean Stage 4 default:
 - VLM model: `Qwen/Qwen2.5-VL-3B-Instruct`
 - prompt version: `qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock_nocroppath`
 
+Before the final Stage 4 rerun, align this prompt version with the winner of the leakage-free Stage 3 rerun path.
+
 The Stage 4 prompt removes `crop_path` from prompt-visible metadata so the VLM cannot read detector class names from crop folder paths.
 
 ## 1) Required inputs
@@ -21,9 +23,17 @@ Check these paths in `configs/stage4_detector_to_vlm_pred_val.yaml`:
 - detector weights: `detector.weights_path`
 - COCO annotations for image/category lookup: `crop_export.coco_json`
 - Stage 3 GT labels for object-level evaluation: `analysis.ground_truth_jsonl`
-- Stage 3 GT-crop ceiling run (optional but recommended): `analysis.ceiling_run_dir`
+- clean Stage 3 GT-crop ceiling run (optional but recommended): `analysis.ceiling_run_dir`
 
 The default config is a template; adjust paths to your local/Kaggle layout.
+
+Recommended clean ceiling run id:
+
+- `outputs/stage3_vlm_baseline_runs/stage3_qwen_val_v2_clean_final`
+
+Notebook entry point for Kaggle:
+
+- `notebooks/stage4_detector_to_vlm_kaggle_run.ipynb`
 
 ## 2) Run Stage 4 in one command
 

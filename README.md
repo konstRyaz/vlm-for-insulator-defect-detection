@@ -2,17 +2,17 @@
 
 Minimal reproducible project for defect detection on power-line insulators.
 
-## Current project status (2026-04-23)
+## Current project status (2026-04-24)
 
 - Stage 2 is formally closed: Faster R-CNN baseline is frozen as `detector_baseline_v1`.
-- Stage 3 is fixed as complete: GT-crop VLM baseline (Qwen2.5-VL) is frozen with final artifacts.
+- Historical Stage 3 GT-crop VLM runs are preserved, but prompt-visible `crop_path` leakage was found and clean reruns are required for final reporting.
+- Historical Stage 4 detector->VLM runs with prompt-visible `crop_path` are diagnostic only; use the clean notebook path for final results.
 - Annotation progress is complete for current subsets:
   - pilot val: `40/40`
   - train batch: `200/200`
-- Prompt calibration sweep (`v3/v4/v5a/v6*`) and final micro-ablation (`v6d` vs `v6f`) are closed.
-- Frozen Stage 3 prompt: `qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock`.
-- Frozen Stage 3 reference run: `outputs/stage3_vlm_baseline_runs/stage3_qwen_val_v2_kaggle`.
-- Immediate next milestone: Stage 4 transition from `GT bbox -> VLM` to `pred bbox -> VLM` with frozen detector baseline.
+- Clean Stage 3 candidate prompt for reruns: `qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock_nocroppath`.
+- Clean rerun runbook: `docs/leakage_free_rerun_plan.md`.
+- Immediate next milestone: rerun Stage 3 ceiling and Stage 4 actual path without leakage, then freeze final research tables.
 - YOLO remains optional later and is not a current blocking step.
 
 Key docs:
@@ -23,6 +23,7 @@ Key docs:
 - `docs/stage3_gt_bbox_to_vlm_plan.md`
 - `docs/stage3_pilot_quickstart.md`
 - `docs/stage3_vlm_baseline_quickstart.md`
+- `docs/leakage_free_rerun_plan.md`
 - `reports/stage3_final_visual_package.md`
 - `reports/stage3_prompt_sweep_v6_checkpoint.md`
 - `reports/stage3_v6d_vs_v6f_checkpoint.md`
@@ -179,19 +180,20 @@ python scripts/run_stage3_vlm_baseline.py \
 python scripts/run_stage3_vlm_baseline.py \
   --config configs/pipeline/stage3_vlm_gt_baseline.yaml \
   --backend-mode qwen_hf \
-  --run-id stage3_qwen_smoke_v1 \
+  --prompt-version qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock_nocroppath \
+  --run-id stage3_qwen_smoke_clean_v1 \
   --max-samples 8 \
   --no-resume
 ```
 
-### 11) Run full Stage 3 `val_v2` baseline (Qwen2.5-VL, frozen prompt)
+### 11) Run full Stage 3 `val_v2` baseline (Qwen2.5-VL, clean prompt path)
 
 ```bash
 python scripts/run_stage3_vlm_baseline.py \
   --config configs/pipeline/stage3_vlm_gt_baseline.yaml \
   --backend-mode qwen_hf \
-  --prompt-version qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock \
-  --run-id stage3_qwen_val_v2 \
+  --prompt-version qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock_nocroppath \
+  --run-id stage3_qwen_val_v2_clean_final \
   --no-resume
 ```
 
@@ -199,7 +201,7 @@ python scripts/run_stage3_vlm_baseline.py \
 
 ```bash
 python scripts/eval_stage3_vlm_baseline.py \
-  --run-dir outputs/stage3_vlm_baseline_runs/stage3_qwen_val_v2 \
+  --run-dir outputs/stage3_vlm_baseline_runs/stage3_qwen_val_v2_clean_final \
   --ground-truth-jsonl outputs/stage3_regrouped_v2/val/vlm_labels_v1_val_v2.annotated.jsonl
 ```
 
@@ -207,7 +209,7 @@ python scripts/eval_stage3_vlm_baseline.py \
 
 ```bash
 python scripts/visualize_stage3_eval_results.py \
-  --eval-dir outputs/stage3_vlm_baseline_runs/stage3_qwen_val_v2/eval \
+  --eval-dir outputs/stage3_vlm_baseline_runs/stage3_qwen_val_v2_clean_final/eval \
   --sweep-csv reports/stage3_prompt_sweep_v6_checkpoint/prompt_sweep_comparison.csv \
   --ablation-csv reports/stage3_v6d_vs_v6f_checkpoint/v6d_vs_v6f_comparison.csv
 ```

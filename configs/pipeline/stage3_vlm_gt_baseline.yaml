@@ -42,35 +42,62 @@ backend:
     timeout_sec: 120
 
 prompt:
-  version: qwen_vlm_labels_v1_prompt_v1
+  version: qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock_nocroppath
   versions:
     qwen_vlm_labels_v1_prompt_v1:
       system_path: configs/pipeline/prompts/stage3_vlm_system_v1.txt
       user_path: configs/pipeline/prompts/stage3_vlm_user_v1.txt
+    qwen_vlm_labels_v1_prompt_v1_nocroppath:
+      system_path: configs/pipeline/prompts/stage3_vlm_system_v1.txt
+      user_path: configs/pipeline/prompts/stage3_vlm_user_v1_nocroppath.txt
     qwen_vlm_labels_v1_prompt_v2:
       system_path: configs/pipeline/prompts/stage3_vlm_system_v2_conservative_visibility.txt
       user_path: configs/pipeline/prompts/stage3_vlm_user_v2_conservative_visibility.txt
+    qwen_vlm_labels_v1_prompt_v2_nocroppath:
+      system_path: configs/pipeline/prompts/stage3_vlm_system_v2_conservative_visibility.txt
+      user_path: configs/pipeline/prompts/stage3_vlm_user_v2_conservative_visibility_nocroppath.txt
     qwen_vlm_labels_v1_prompt_v3:
       system_path: configs/pipeline/prompts/stage3_vlm_system_v3_visibility_tag_calibrated.txt
       user_path: configs/pipeline/prompts/stage3_vlm_user_v3_visibility_tag_calibrated.txt
+    qwen_vlm_labels_v1_prompt_v3_nocroppath:
+      system_path: configs/pipeline/prompts/stage3_vlm_system_v3_visibility_tag_calibrated.txt
+      user_path: configs/pipeline/prompts/stage3_vlm_user_v3_visibility_tag_calibrated_nocroppath.txt
     qwen_vlm_labels_v1_prompt_v4:
       system_path: configs/pipeline/prompts/stage3_vlm_system_v4_visibility_recalibrated.txt
       user_path: configs/pipeline/prompts/stage3_vlm_user_v4_visibility_recalibrated.txt
+    qwen_vlm_labels_v1_prompt_v4_nocroppath:
+      system_path: configs/pipeline/prompts/stage3_vlm_system_v4_visibility_recalibrated.txt
+      user_path: configs/pipeline/prompts/stage3_vlm_user_v4_visibility_recalibrated_nocroppath.txt
     qwen_vlm_labels_v1_prompt_v5:
       system_path: configs/pipeline/prompts/stage3_vlm_system_v5_visibility_gate.txt
       user_path: configs/pipeline/prompts/stage3_vlm_user_v5_visibility_gate.txt
+    qwen_vlm_labels_v1_prompt_v5_nocroppath:
+      system_path: configs/pipeline/prompts/stage3_vlm_system_v5_visibility_gate.txt
+      user_path: configs/pipeline/prompts/stage3_vlm_user_v5_visibility_gate_nocroppath.txt
     qwen_vlm_labels_v1_prompt_v5a_visibility_gate_best:
       system_path: configs/pipeline/prompts/stage3_vlm_system_v5a_visibility_gate_best.txt
       user_path: configs/pipeline/prompts/stage3_vlm_user_v5a_visibility_gate_best.txt
+    qwen_vlm_labels_v1_prompt_v5a_visibility_gate_best_nocroppath:
+      system_path: configs/pipeline/prompts/stage3_vlm_system_v5a_visibility_gate_best.txt
+      user_path: configs/pipeline/prompts/stage3_vlm_user_v5a_visibility_gate_best_nocroppath.txt
     qwen_vlm_labels_v1_prompt_v6a_notaglock:
       system_path: configs/pipeline/prompts/stage3_vlm_system_v6a_notaglock.txt
       user_path: configs/pipeline/prompts/stage3_vlm_user_v6a_notaglock.txt
+    qwen_vlm_labels_v1_prompt_v6a_notaglock_nocroppath:
+      system_path: configs/pipeline/prompts/stage3_vlm_system_v6a_notaglock.txt
+      user_path: configs/pipeline/prompts/stage3_vlm_user_v6a_notaglock_nocroppath.txt
     qwen_vlm_labels_v1_prompt_v6b_positive_ambiguous:
       system_path: configs/pipeline/prompts/stage3_vlm_system_v6b_positive_ambiguous.txt
       user_path: configs/pipeline/prompts/stage3_vlm_user_v6b_positive_ambiguous.txt
+    qwen_vlm_labels_v1_prompt_v6b_positive_ambiguous_nocroppath:
+      system_path: configs/pipeline/prompts/stage3_vlm_system_v6b_positive_ambiguous.txt
+      user_path: configs/pipeline/prompts/stage3_vlm_user_v6b_positive_ambiguous_nocroppath.txt
     qwen_vlm_labels_v1_prompt_v6c_balanced:
       system_path: configs/pipeline/prompts/stage3_vlm_system_v6c_balanced.txt
       user_path: configs/pipeline/prompts/stage3_vlm_user_v6c_balanced.txt
+    qwen_vlm_labels_v1_prompt_v6c_balanced_nocroppath:
+      system_path: configs/pipeline/prompts/stage3_vlm_system_v6c_balanced.txt
+      user_path: configs/pipeline/prompts/stage3_vlm_user_v6c_balanced_nocroppath.txt
     qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock:
       system_path: configs/pipeline/prompts/stage3_vlm_system_v6d_balanced_notaglock.txt
       user_path: configs/pipeline/prompts/stage3_vlm_user_v6d_balanced_notaglock.txt
@@ -80,11 +107,17 @@ prompt:
     qwen_vlm_labels_v1_prompt_v6e_partial_geometry:
       system_path: configs/pipeline/prompts/stage3_vlm_system_v6e_partial_geometry.txt
       user_path: configs/pipeline/prompts/stage3_vlm_user_v6e_partial_geometry.txt
+    qwen_vlm_labels_v1_prompt_v6e_partial_geometry_nocroppath:
+      system_path: configs/pipeline/prompts/stage3_vlm_system_v6e_partial_geometry.txt
+      user_path: configs/pipeline/prompts/stage3_vlm_user_v6e_partial_geometry_nocroppath.txt
     qwen_vlm_labels_v1_prompt_v6f_balanced_notaglock_soft_ambiguous_raise:
       system_path: configs/pipeline/prompts/stage3_vlm_system_v6f_balanced_notaglock_soft_ambiguous_raise.txt
       user_path: configs/pipeline/prompts/stage3_vlm_user_v6f_balanced_notaglock_soft_ambiguous_raise.txt
-  system_path: configs/pipeline/prompts/stage3_vlm_system_v1.txt
-  user_path: configs/pipeline/prompts/stage3_vlm_user_v1.txt
+    qwen_vlm_labels_v1_prompt_v6f_balanced_notaglock_soft_ambiguous_raise_nocroppath:
+      system_path: configs/pipeline/prompts/stage3_vlm_system_v6f_balanced_notaglock_soft_ambiguous_raise.txt
+      user_path: configs/pipeline/prompts/stage3_vlm_user_v6f_balanced_notaglock_soft_ambiguous_raise_nocroppath.txt
+  system_path: configs/pipeline/prompts/stage3_vlm_system_v6d_balanced_notaglock.txt
+  user_path: configs/pipeline/prompts/stage3_vlm_user_v6d_balanced_notaglock_nocroppath.txt
 
 prediction_contract:
   mode: reduced_subset_v1

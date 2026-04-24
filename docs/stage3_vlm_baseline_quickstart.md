@@ -4,11 +4,16 @@ This Stage 3 baseline remains:
 
 `annotated GT crop dataset -> VLM -> parsed prediction -> vlm_labels_v1 mapping -> validation -> evaluation`
 
-Current freeze point:
+Current clean rerun path:
 
-- prompt: `qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock`
-- reference run: `outputs/stage3_vlm_baseline_runs/stage3_qwen_val_v2_kaggle`
-- final prompt decision: `reports/stage3_v6d_vs_v6f_checkpoint.md`
+- safe default prompt: `qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock_nocroppath`
+- stable clean run id: `stage3_qwen_val_v2_clean_final`
+- clean rerun plan: `docs/leakage_free_rerun_plan.md`
+
+Important note:
+
+- historical Stage 3 runs that used prompt-visible `crop_path` are debugging checkpoints only
+- final reporting should use only `_nocroppath` prompt versions and clean rerun notebooks
 
 Recommended runtime is cloud notebook GPU:
 
@@ -35,15 +40,16 @@ Prompt assets:
 - `configs/pipeline/prompts/stage3_vlm_user_v5a_visibility_gate_best.txt`
 - `configs/pipeline/prompts/stage3_vlm_system_v6d_balanced_notaglock.txt`
 - `configs/pipeline/prompts/stage3_vlm_user_v6d_balanced_notaglock.txt`
+- `configs/pipeline/prompts/stage3_vlm_user_v6d_balanced_notaglock_nocroppath.txt`
 
 Prompt version selection:
 
-- default in config: `qwen_vlm_labels_v1_prompt_v1`
+- default in config: `qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock_nocroppath`
 - conservative tuning pass: `qwen_vlm_labels_v1_prompt_v2`
 - calibrated visibility/tag tuning pass: `qwen_vlm_labels_v1_prompt_v3`
 - visibility recalibration pass: `qwen_vlm_labels_v1_prompt_v4`
 - visibility gate pass: `qwen_vlm_labels_v1_prompt_v5`
-- frozen Stage 3 version: `qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock`
+- clean Stage 3 candidate: `qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock_nocroppath`
 - CLI override: `--prompt-version <version>`
 
 Prediction contract mode: `reduced_subset_v1`
@@ -110,8 +116,8 @@ Tiny smoke-run (5-8 samples):
 python scripts/run_stage3_vlm_baseline.py \
   --config configs/pipeline/stage3_vlm_gt_baseline.yaml \
   --backend-mode qwen_hf \
-  --prompt-version qwen_vlm_labels_v1_prompt_v1 \
-  --run-id stage3_qwen_smoke_v1 \
+  --prompt-version qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock_nocroppath \
+  --run-id stage3_qwen_smoke_clean_v1 \
   --max-samples 8 \
   --no-resume
 ```
@@ -122,10 +128,16 @@ Full `val_v2` run:
 python scripts/run_stage3_vlm_baseline.py \
   --config configs/pipeline/stage3_vlm_gt_baseline.yaml \
   --backend-mode qwen_hf \
-  --prompt-version qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock \
-  --run-id stage3_qwen_val_v2 \
+  --prompt-version qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock_nocroppath \
+  --run-id stage3_qwen_val_v2_clean_final \
   --no-resume
 ```
+
+Leakage-free Kaggle notebooks:
+
+- `notebooks/stage3_qwen_kaggle_clean_onepass.ipynb`
+- `notebooks/stage3_prompt_sweep_visibility_v6_clean.ipynb`
+- `notebooks/stage3_final_micro_ablation_v6d_vs_v6f_clean.ipynb`
 
 Optional targeted subset (record IDs):
 
@@ -189,6 +201,10 @@ Run directory:
 - `outputs/stage3_vlm_baseline_runs/<run_id>/failures.jsonl`
 - `outputs/stage3_vlm_baseline_runs/<run_id>/run_summary.json`
 - `outputs/stage3_vlm_baseline_runs/<run_id>/config_snapshot.json`
+
+Clean-run audit check:
+
+- `run_summary.json -> prompt_selection.user_prompt_contains_crop_path_token` must be `false`
 
 Evaluation directory (`<run_dir>/eval` by default):
 
