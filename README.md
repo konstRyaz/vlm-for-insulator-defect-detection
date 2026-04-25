@@ -10,7 +10,7 @@ Minimal reproducible project for defect detection on power-line insulators.
 - Annotation progress is complete for current subsets:
   - pilot val: `40/40`
   - train batch: `200/200`
-- Clean Stage 3 candidate prompt for reruns: `qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock_nocroppath`.
+- Final clean Stage 3 prompt: `qwen_vlm_labels_v1_prompt_v7f_flashover_unclear_to_unknown_nocroppath`.
 - Clean rerun runbook: `docs/leakage_free_rerun_plan.md`.
 - Immediate next milestone: rerun Stage 3 ceiling and Stage 4 actual path without leakage, then freeze final research tables.
 - YOLO remains optional later and is not a current blocking step.
@@ -180,7 +180,7 @@ python scripts/run_stage3_vlm_baseline.py \
 python scripts/run_stage3_vlm_baseline.py \
   --config configs/pipeline/stage3_vlm_gt_baseline.yaml \
   --backend-mode qwen_hf \
-  --prompt-version qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock_nocroppath \
+  --prompt-version qwen_vlm_labels_v1_prompt_v7f_flashover_unclear_to_unknown_nocroppath \
   --run-id stage3_qwen_smoke_clean_v1 \
   --max-samples 8 \
   --no-resume
@@ -192,7 +192,7 @@ python scripts/run_stage3_vlm_baseline.py \
 python scripts/run_stage3_vlm_baseline.py \
   --config configs/pipeline/stage3_vlm_gt_baseline.yaml \
   --backend-mode qwen_hf \
-  --prompt-version qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock_nocroppath \
+  --prompt-version qwen_vlm_labels_v1_prompt_v7f_flashover_unclear_to_unknown_nocroppath \
   --run-id stage3_qwen_val_v2_clean_final \
   --no-resume
 ```

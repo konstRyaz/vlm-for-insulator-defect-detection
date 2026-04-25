@@ -42,7 +42,7 @@ backend:
     timeout_sec: 120
 
 prompt:
-  version: qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock_nocroppath
+  version: qwen_vlm_labels_v1_prompt_v7f_flashover_unclear_to_unknown_nocroppath
   versions:
     qwen_vlm_labels_v1_prompt_v1:
       system_path: configs/pipeline/prompts/stage3_vlm_system_v1.txt

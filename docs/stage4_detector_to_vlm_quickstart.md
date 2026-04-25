@@ -9,7 +9,7 @@ Flow:
 Current clean Stage 4 default:
 
 - VLM model: `Qwen/Qwen2.5-VL-3B-Instruct`
-- prompt version: `qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock_nocroppath`
+- prompt version: `qwen_vlm_labels_v1_prompt_v7f_flashover_unclear_to_unknown_nocroppath`
 
 Before the final Stage 4 rerun, align this prompt version with the winner of the leakage-free Stage 3 rerun path.
 
