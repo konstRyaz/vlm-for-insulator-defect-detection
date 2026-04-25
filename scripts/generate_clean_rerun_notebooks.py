@@ -42,7 +42,7 @@ def build_stage3_clean_onepass() -> None:
         "]\n\n"
         'JSONL_REL = Path("stage3_regrouped_v2/val/vlm_labels_v1_val_v2.annotated.jsonl")\n\n'
         'BACKEND_MODE = "qwen_hf"\n'
-        'PROMPT_VERSION = "qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock_nocroppath"\n'
+        'PROMPT_VERSION = "qwen_vlm_labels_v1_prompt_v7f_flashover_unclear_to_unknown_nocroppath"\n'
         'RUN_ID = "stage3_qwen_val_v2_clean_final"\n\n'
         "DO_PREFLIGHT = True\n"
         "PREFLIGHT_SAMPLES = 1\n"
@@ -958,7 +958,7 @@ def patch_stage4_notebook() -> None:
         "REPO_DIR = Path('/kaggle/working/vlm-for-insulator-defect-detection')\n"
         "REPO_URL = 'https://github.com/konstRyaz/vlm-for-insulator-defect-detection.git'\n"
         "RUN_NAME = 'stage4_detector_to_vlm_pred_val_kaggle'\n"
-        "STAGE4_PROMPT_VERSION = 'qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock_nocroppath'\n\n"
+        "STAGE4_PROMPT_VERSION = 'qwen_vlm_labels_v1_prompt_v7f_flashover_unclear_to_unknown_nocroppath'\n\n"
         "print('DATA_ROOT:', DATA_ROOT)\n"
         "print('REPO_DIR :', REPO_DIR)\n"
         "print('RUN_NAME :', RUN_NAME)\n"

@@ -27,7 +27,14 @@ Use only prompt versions with the `_nocroppath` suffix.
 
 Current safe default:
 
-- `qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock_nocroppath`
+- `qwen_vlm_labels_v1_prompt_v7f_flashover_unclear_to_unknown_nocroppath`
+
+Final clean reference results:
+
+- Stage 3 GT-crop ceiling: `0.4655` coarse accuracy, `0.2882` coarse macro-F1.
+- Stage 4 detector-to-VLM actual: `0.3621` pipeline correct rate.
+- Clean ceiling-vs-actual gap: `0.1034`.
+- Stage 4 detector match rate: `1.0000`; good crop rate among matched boxes: `0.9828`.
 
 The Stage 3 runner now records this audit field in `run_summary.json`:
 
@@ -112,7 +119,7 @@ For Stage 3 clean runs:
 
 For Stage 4 clean runs:
 
-- selected prompt version is `qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock_nocroppath`
+- selected prompt version is `qwen_vlm_labels_v1_prompt_v7f_flashover_unclear_to_unknown_nocroppath`
 - notebook preflight confirms the selected user prompt does not contain `crop_path`
 - if a clean ceiling run is attached, `ceiling_vs_actual.json` is based on `stage3_qwen_val_v2_clean_final`
 

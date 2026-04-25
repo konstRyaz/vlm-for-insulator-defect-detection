@@ -2,11 +2,12 @@
 
 This repository now includes an extended Stage 3 visualization pass that generates a consolidated report with charts and tables from eval artifacts.
 
-Stage 3 freeze context:
+Stage 3 note:
 
-- frozen prompt: `qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock`
-- reference run: `outputs/stage3_vlm_baseline_runs/stage3_qwen_val_v2_kaggle`
-- prompt decision checkpoints:
+- the earlier visual package was built for the historical v6d prompt before the leakage-free rerun
+- the current clean Stage 3 reference prompt is `qwen_vlm_labels_v1_prompt_v7f_flashover_unclear_to_unknown_nocroppath`
+- current clean artifacts are stored under `outputs/_external_runs/stage3_clean_final_v7f/`
+- historical prompt decision checkpoints:
   - `reports/stage3_prompt_sweep_v6_checkpoint.md`
   - `reports/stage3_v6d_vs_v6f_checkpoint.md`
 

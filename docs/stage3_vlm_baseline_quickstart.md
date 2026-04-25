@@ -6,7 +6,7 @@ This Stage 3 baseline remains:
 
 Current clean rerun path:
 
-- safe default prompt: `qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock_nocroppath`
+- final clean prompt: `qwen_vlm_labels_v1_prompt_v7f_flashover_unclear_to_unknown_nocroppath`
 - stable clean run id: `stage3_qwen_val_v2_clean_final`
 - clean rerun plan: `docs/leakage_free_rerun_plan.md`
 
@@ -39,17 +39,19 @@ Prompt assets:
 - `configs/pipeline/prompts/stage3_vlm_system_v5a_visibility_gate_best.txt`
 - `configs/pipeline/prompts/stage3_vlm_user_v5a_visibility_gate_best.txt`
 - `configs/pipeline/prompts/stage3_vlm_system_v6d_balanced_notaglock.txt`
+- `configs/pipeline/prompts/stage3_vlm_system_v7f_flashover_unclear_to_unknown.txt`
 - `configs/pipeline/prompts/stage3_vlm_user_v6d_balanced_notaglock.txt`
 - `configs/pipeline/prompts/stage3_vlm_user_v6d_balanced_notaglock_nocroppath.txt`
 
 Prompt version selection:
 
-- default in config: `qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock_nocroppath`
+- default in config: `qwen_vlm_labels_v1_prompt_v7f_flashover_unclear_to_unknown_nocroppath`
 - conservative tuning pass: `qwen_vlm_labels_v1_prompt_v2`
 - calibrated visibility/tag tuning pass: `qwen_vlm_labels_v1_prompt_v3`
 - visibility recalibration pass: `qwen_vlm_labels_v1_prompt_v4`
 - visibility gate pass: `qwen_vlm_labels_v1_prompt_v5`
-- clean Stage 3 candidate: `qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock_nocroppath`
+- clean Stage 3 visibility/control reference: `qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock_nocroppath`
+- final clean Stage 3 coarse-oriented prompt: `qwen_vlm_labels_v1_prompt_v7f_flashover_unclear_to_unknown_nocroppath`
 - CLI override: `--prompt-version <version>`
 
 Prediction contract mode: `reduced_subset_v1`
@@ -116,7 +118,7 @@ Tiny smoke-run (5-8 samples):
 python scripts/run_stage3_vlm_baseline.py \
   --config configs/pipeline/stage3_vlm_gt_baseline.yaml \
   --backend-mode qwen_hf \
-  --prompt-version qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock_nocroppath \
+  --prompt-version qwen_vlm_labels_v1_prompt_v7f_flashover_unclear_to_unknown_nocroppath \
   --run-id stage3_qwen_smoke_clean_v1 \
   --max-samples 8 \
   --no-resume
@@ -128,7 +130,7 @@ Full `val_v2` run:
 python scripts/run_stage3_vlm_baseline.py \
   --config configs/pipeline/stage3_vlm_gt_baseline.yaml \
   --backend-mode qwen_hf \
-  --prompt-version qwen_vlm_labels_v1_prompt_v6d_balanced_notaglock_nocroppath \
+  --prompt-version qwen_vlm_labels_v1_prompt_v7f_flashover_unclear_to_unknown_nocroppath \
   --run-id stage3_qwen_val_v2_clean_final \
   --no-resume
 ```

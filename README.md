@@ -5,14 +5,14 @@ Minimal reproducible project for defect detection on power-line insulators.
 ## Current project status (2026-04-24)
 
 - Stage 2 is formally closed: Faster R-CNN baseline is frozen as `detector_baseline_v1`.
-- Historical Stage 3 GT-crop VLM runs are preserved, but prompt-visible `crop_path` leakage was found and clean reruns are required for final reporting.
-- Historical Stage 4 detector->VLM runs with prompt-visible `crop_path` are diagnostic only; use the clean notebook path for final results.
+- Historical Stage 3/4 VLM runs with prompt-visible `crop_path` are preserved as diagnostic history only.
+- Clean Stage 3 and Stage 4 reruns are complete and should be used for final reporting.
 - Annotation progress is complete for current subsets:
   - pilot val: `40/40`
   - train batch: `200/200`
 - Final clean Stage 3 prompt: `qwen_vlm_labels_v1_prompt_v7f_flashover_unclear_to_unknown_nocroppath`.
 - Clean rerun runbook: `docs/leakage_free_rerun_plan.md`.
-- Immediate next milestone: rerun Stage 3 ceiling and Stage 4 actual path without leakage, then freeze final research tables.
+- Current milestone: freeze final research tables, visual summaries, and the end-to-end demo path.
 - YOLO remains optional later and is not a current blocking step.
 
 Key docs:

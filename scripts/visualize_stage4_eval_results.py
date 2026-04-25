@@ -551,6 +551,11 @@ def main() -> None:
     )
     pattern_labels = [f"{row.gt_coarse_class} -> {row.pred_vlm_coarse_class}" for row in error_patterns.itertuples()]
     pattern_values = error_patterns["count"].tolist()
+    main_error_pattern = "no good-crop VLM errors"
+    main_error_count = 0
+    if pattern_labels:
+        main_error_pattern = pattern_labels[0]
+        main_error_count = int(pattern_values[0])
     save_counts_bar_chart(
         labels=pattern_labels,
         values=pattern_values,
@@ -647,6 +652,33 @@ def main() -> None:
     detector_equals_vlm = int(good_df["detector_equals_vlm"].sum())
     detector_equals_gt = int(good_df["detector_equals_gt"].sum())
     vlm_equals_gt = int(good_df["vlm_equals_gt"].sum())
+    detector_equals_vlm_rate = safe_div(detector_equals_vlm, len(good_df))
+    detector_equals_gt_rate = safe_div(detector_equals_gt, len(good_df))
+    vlm_equals_gt_rate = safe_div(vlm_equals_gt, len(good_df))
+
+    if prompt_has_crop_path:
+        leakage_heading = "## Important caution: detector-label leakage is likely"
+        leakage_takeaway = (
+            "This pattern is too strong to ignore. It suggests the current Stage 4 run is not a clean test of visual reasoning alone."
+        )
+        bottom_line_tail = "- and the current Stage 4 setup appears to leak detector class metadata into the VLM prompt."
+        next_step = (
+            "So the next clean experiment should first remove `crop_path` leakage from the prompt, then rerun Stage 4 before doing more prompt tuning."
+        )
+    elif detector_equals_vlm_rate >= 0.85:
+        leakage_heading = "## Important caution: detector-VLM agreement is still suspiciously high"
+        leakage_takeaway = (
+            "The prompt no longer exposes `crop_path`, but agreement remains high enough that the interface should still be checked carefully."
+        )
+        bottom_line_tail = "- and detector-VLM agreement is still suspiciously high enough to justify another interface check."
+        next_step = "The next step is to audit remaining metadata fields before trusting this run as the final Stage 4 estimate."
+    else:
+        leakage_heading = "## Detector-VLM agreement diagnostic"
+        leakage_takeaway = (
+            "The extreme leakage pattern from the earlier run is no longer present. This run is a more trustworthy estimate of current `pred crop -> VLM` quality."
+        )
+        bottom_line_tail = "- and the earlier leakage signal is largely removed, so this run is the clean Stage 4 reference."
+        next_step = "The next step is to analyze the remaining coarse-class failures and decide whether one narrow Stage 4 improvement pass is worthwhile."
 
     report_lines = [
         "# Stage 4 Visual Report",
@@ -697,16 +729,16 @@ def main() -> None:
         f"- `bad_crop_from_detector`: `{error_counts.get('bad_crop_from_detector', 0)}`",
         f"- `detector_miss`: `{error_counts.get('detector_miss', 0)}`",
         "",
-        "The main coarse-class failure is `defect_flashover -> insulator_ok`.",
+        f"The largest coarse-class failure pattern is `{main_error_pattern}` with `{main_error_count}` cases.",
         "Visibility is not the main Stage 4 problem in this run; the drop is mostly in coarse-class separation on predicted crops.",
         "",
-        "## Important caution: possible detector-label leakage into the VLM prompt",
+        leakage_heading,
         "",
-        f"- On good predicted crops, `detector category == VLM coarse class` in `{detector_equals_vlm}/{len(good_df)}` cases = `{safe_div(detector_equals_vlm, len(good_df)):.4f}`.",
-        f"- On the same set, `detector category == GT` only in `{detector_equals_gt}/{len(good_df)}` cases = `{safe_div(detector_equals_gt, len(good_df)):.4f}`.",
-        f"- `VLM == GT` is `{vlm_equals_gt}/{len(good_df)}` = `{safe_div(vlm_equals_gt, len(good_df)):.4f}`.",
+        f"- On good predicted crops, `detector category == VLM coarse class` in `{detector_equals_vlm}/{len(good_df)}` cases = `{detector_equals_vlm_rate:.4f}`.",
+        f"- On the same set, `detector category == GT` only in `{detector_equals_gt}/{len(good_df)}` cases = `{detector_equals_gt_rate:.4f}`.",
+        f"- `VLM == GT` is `{vlm_equals_gt}/{len(good_df)}` = `{vlm_equals_gt_rate:.4f}`.",
         "",
-        "That pattern is too strong to ignore. It suggests the current Stage 4 run is not a clean test of visual reasoning alone.",
+        leakage_takeaway,
         "",
         "Why this is plausible:",
         "",
@@ -750,10 +782,10 @@ def main() -> None:
             "Right now it says:",
             "",
             "- localization/crop quality is strong,",
-            "- end-to-end coarse accuracy is much lower than Stage 3 ceiling,",
-            "- and the current Stage 4 setup appears to leak detector class metadata into the VLM prompt.",
+            "- end-to-end coarse accuracy is below the Stage 3 ceiling,",
+            bottom_line_tail,
             "",
-            "So the next clean experiment should first remove `crop_path` leakage from the prompt, then rerun Stage 4 before doing more prompt tuning.",
+            next_step,
         ]
     )
     (out_dir / "report.md").write_text("\n".join(report_lines) + "\n", encoding="utf-8")

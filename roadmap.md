@@ -13,19 +13,20 @@ The project should be strong in two dimensions:
 - engineering: reproducible training/evaluation/inference pipeline;
 - research: measurable comparison of prompting/input strategies and at least 1-2 justified improvements.
 
-## Status update (2026-04-24)
+## Status update (2026-04-25)
 
 - Stage 1 is complete for the current baseline path.
 - Stage 2 is formally closed with frozen Faster R-CNN `detector_baseline_v1`.
-- Historical Stage 3 GT-crop runs are preserved, but prompt-visible `crop_path` leakage was found and clean reruns are required for final reporting.
-- Historical Stage 4 detector->VLM runs with prompt-visible `crop_path` are diagnostic only; the clean rerun path is now the active baseline.
-- Active execution focus: clean reruns for Stage 3 ceiling, prompt selection, and Stage 4 actual pipeline.
+- Stage 3 is closed again after the leakage-free rerun. Final clean prompt:
+  `qwen_vlm_labels_v1_prompt_v7f_flashover_unclear_to_unknown_nocroppath`.
+- Stage 4 clean detector-to-VLM rerun is complete. Final clean comparison:
+  Stage 3 ceiling `0.4655`, Stage 4 actual `0.3621`, gap `0.1034`.
 - Current annotation progress is complete for prepared subsets:
   - pilot val: `40/40`
   - train batch: `200/200`
 - YOLO remains optional and non-blocking for the current milestone.
 
-Practical note: many sections below remain as planning history. The active execution focus now is leakage-free reruns plus final Stage 4 interpretation.
+Practical note: many sections below remain as planning history. The active execution focus now is final reporting, visual summaries, and a small end-to-end demo path.
 
 ## Current repo status
 
@@ -389,13 +390,8 @@ Recommended practical order from today:
 
 ## Decision on YOLO vs Faster R-CNN
 
-Short answer:
-
 - YOLO can still be useful for speed-focused practical comparison later;
 - YOLO is not required to proceed with Stage 3 and is not a blocking step now.
-
-Recommended decision rule:
-
 - keep Faster R-CNN baseline frozen for the main project trajectory;
 - add YOLO only after Stage 3 baseline is standing and only if time remains.
 

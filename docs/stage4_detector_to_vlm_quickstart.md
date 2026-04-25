@@ -11,9 +11,8 @@ Current clean Stage 4 default:
 - VLM model: `Qwen/Qwen2.5-VL-3B-Instruct`
 - prompt version: `qwen_vlm_labels_v1_prompt_v7f_flashover_unclear_to_unknown_nocroppath`
 
-Before the final Stage 4 rerun, align this prompt version with the winner of the leakage-free Stage 3 rerun path.
-
 The Stage 4 prompt removes `crop_path` from prompt-visible metadata so the VLM cannot read detector class names from crop folder paths.
+The current clean reference uses the final leakage-free Stage 3 prompt listed above.
 
 ## 1) Required inputs
 
