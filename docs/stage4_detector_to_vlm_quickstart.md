@@ -62,6 +62,18 @@ Main artifacts after run:
 - Stage 4 summary: `04_eval/stage4_summary.md`
 - ceiling vs actual summary: `05_compare/ceiling_vs_actual.json`
 
+Optional targeted review from an existing Stage 4 eval:
+
+```bash
+python scripts/build_stage4_targeted_error_review.py \
+  --case-table outputs/stage4/<run_name>/04_eval/stage4_case_table.csv \
+  --pred-manifest-jsonl outputs/stage4/<run_name>/02_pred_crops/pred_manifest.jsonl \
+  --predictions-jsonl outputs/stage4/<run_name>/03_vlm_pred/<vlm_run_id>/predictions_vlm_labels_v1.jsonl \
+  --raw-responses-jsonl outputs/stage4/<run_name>/03_vlm_pred/<vlm_run_id>/raw_responses.jsonl \
+  --pred-crops-dir outputs/stage4/<run_name>/02_pred_crops \
+  --out-dir outputs/stage4/<run_name>/04_eval/targeted_review
+```
+
 ## 4) What Stage 4 metrics mean
 
 - `detector_match_rate`: GT objects with a matched predicted box (`IoU >= match_iou_threshold`).

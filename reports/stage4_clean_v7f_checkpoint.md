@@ -44,6 +44,7 @@ Most remaining loss is in VLM coarse-class decisions on geometrically good predi
 - Clean Stage 3 final artifacts: `outputs/_external_runs/stage3_clean_final_v7f/`
 - Clean Stage 4 eval with ceiling: `outputs/_external_runs/stage4_clean_v7f_with_ceiling/04_eval/`
 - Clean Stage 4 visual report: `outputs/_external_runs/stage4_clean_v7f_with_ceiling/04_eval/visuals/report.md`
+- Targeted error review: `outputs/_external_runs/stage4_clean_v7f_with_ceiling/04_eval/targeted_review/targeted_error_review.html`
 - Main case table: `outputs/_external_runs/stage4_clean_v7f_with_ceiling/04_eval/stage4_case_table.csv`
 
 ## Research Use
@@ -57,4 +58,3 @@ The clean comparison is now:
 `pred crop -> VLM actual = 0.3621`
 
 `gap = 0.1034`
-
