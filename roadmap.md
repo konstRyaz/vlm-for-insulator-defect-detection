@@ -29,7 +29,7 @@ The project should be strong in two dimensions:
   - train batch: `200/200`
 - YOLO remains optional and non-blocking for the current milestone.
 
-Practical note: many sections below remain as planning history. The active execution focus now is final reporting, visual summaries, and a small end-to-end demo path.
+Practical note: many sections below remain as planning history. The final clean Stage 3/4 checkpoint is summarized in `reports/final_research_summary.md`, with presentation-ready Stage 4 tables and plots in `reports/final_stage4_package/`.
 The remaining research bottleneck is VLM semantic separation, especially normal insulators versus flashover-like dark traces.
 
 ## Current repo status

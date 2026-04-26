@@ -14,7 +14,7 @@ Minimal reproducible project for defect detection on power-line insulators.
 - Best current Stage 4 input candidate: predicted crop context padding `0.30` with Qwen `max_pixels=401408`.
 - Clean Stage 4 actual improved from tight-crop `0.3621` to context-crop `0.3966`; Stage 3 GT-crop ceiling remains `0.4655`.
 - Clean rerun runbook: `docs/leakage_free_rerun_plan.md`.
-- Current milestone: freeze final research tables, visual summaries, and the end-to-end demo path.
+- Current milestone: final clean Stage 3/4 results are frozen for reporting.
 - YOLO remains optional later and is not a current blocking step.
 
 Key docs:
@@ -27,6 +27,8 @@ Key docs:
 - `docs/stage3_vlm_baseline_quickstart.md`
 - `docs/leakage_free_rerun_plan.md`
 - `reports/stage3_final_visual_package.md`
+- `reports/final_research_summary.md`
+- `reports/final_stage4_package/README.md`
 - `reports/stage4_context_comparison_final/report.md`
 - `reports/stage4_context_padding_capped_result.md`
 - `reports/stage3_prompt_sweep_v6_checkpoint.md`
