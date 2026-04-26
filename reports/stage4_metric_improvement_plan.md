@@ -54,7 +54,7 @@ Recommended comparison:
 | context crop | same predicted/GT box with larger padding | tests whether missing local context causes false flashover |
 | two-view crop | tight crop plus context crop, if the runner can support it minimally | tests whether the VLM needs both detail and context |
 
-The first runnable ablation is:
+The completed context ablation is:
 
 - notebook: `notebooks/stage4_context_pad050_kaggle_run.ipynb`
 - run name: `stage4_detector_to_vlm_pred_val_context_pad050_maxpix401k_kaggle`
@@ -64,6 +64,13 @@ The first runnable ablation is:
 
 The uncapped `padding=0.50` Kaggle run produced 21 Qwen backend OOM errors, so
 the capped rerun is the comparable experiment.
+
+The next notebook is a milder context test:
+
+- notebook: `notebooks/stage4_context_pad030_kaggle_run.ipynb`
+- run name: `stage4_detector_to_vlm_pred_val_context_pad030_maxpix401k_kaggle`
+- crop padding: `0.30`
+- Qwen visual cap: `max_pixels=401408`
 
 Acceptance signal:
 

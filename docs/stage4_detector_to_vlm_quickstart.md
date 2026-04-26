@@ -37,6 +37,7 @@ Notebook entry point for Kaggle:
 Context-padding ablation notebook:
 
 - `notebooks/stage4_context_pad050_kaggle_run.ipynb`
+- `notebooks/stage4_context_pad030_kaggle_run.ipynb`
 
 ## 2) Run Stage 4 in one command
 
