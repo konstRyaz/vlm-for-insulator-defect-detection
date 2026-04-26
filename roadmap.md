@@ -31,6 +31,7 @@ The project should be strong in two dimensions:
 
 Practical note: many sections below remain as planning history. The final clean Stage 3/4 checkpoint is summarized in `reports/final_research_summary.md`, with presentation-ready Stage 4 tables and plots in `reports/final_stage4_package/`.
 The remaining research bottleneck is VLM semantic separation, especially normal insulators versus flashover-like dark traces.
+The next optional research branch is stronger/domain VLM evaluation and supervised adaptation; see `docs/vlm_expansion_plan.md`.
 
 ## Current repo status
 

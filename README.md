@@ -26,6 +26,8 @@ Key docs:
 - `docs/stage3_pilot_quickstart.md`
 - `docs/stage3_vlm_baseline_quickstart.md`
 - `docs/leakage_free_rerun_plan.md`
+- `docs/vlm_expansion_plan.md`
+- `docs/vlm_model_availability_audit.md`
 - `reports/stage3_final_visual_package.md`
 - `reports/final_research_summary.md`
 - `reports/final_stage4_package/README.md`
