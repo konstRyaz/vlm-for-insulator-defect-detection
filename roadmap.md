@@ -13,20 +13,24 @@ The project should be strong in two dimensions:
 - engineering: reproducible training/evaluation/inference pipeline;
 - research: measurable comparison of prompting/input strategies and at least 1-2 justified improvements.
 
-## Status update (2026-04-25)
+## Status update (2026-04-26)
 
 - Stage 1 is complete for the current baseline path.
 - Stage 2 is formally closed with frozen Faster R-CNN `detector_baseline_v1`.
 - Stage 3 is closed again after the leakage-free rerun. Final clean prompt:
   `qwen_vlm_labels_v1_prompt_v7f_flashover_unclear_to_unknown_nocroppath`.
-- Stage 4 clean detector-to-VLM rerun is complete. Final clean comparison:
+- Stage 4 clean detector-to-VLM rerun is complete. Tight-crop comparison:
   Stage 3 ceiling `0.4655`, Stage 4 actual `0.3621`, gap `0.1034`.
+- Stage 4 context-crop ablation improved the current actual pipeline rate:
+  context padding `0.30` + Qwen `max_pixels=401408` reached `0.3966`
+  with a reduced ceiling gap of `0.0690`.
 - Current annotation progress is complete for prepared subsets:
   - pilot val: `40/40`
   - train batch: `200/200`
 - YOLO remains optional and non-blocking for the current milestone.
 
 Practical note: many sections below remain as planning history. The active execution focus now is final reporting, visual summaries, and a small end-to-end demo path.
+The remaining research bottleneck is VLM semantic separation, especially normal insulators versus flashover-like dark traces.
 
 ## Current repo status
 

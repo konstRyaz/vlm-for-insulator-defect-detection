@@ -2,7 +2,7 @@
 
 Minimal reproducible project for defect detection on power-line insulators.
 
-## Current project status (2026-04-24)
+## Current project status (2026-04-26)
 
 - Stage 2 is formally closed: Faster R-CNN baseline is frozen as `detector_baseline_v1`.
 - Historical Stage 3/4 VLM runs with prompt-visible `crop_path` are preserved as diagnostic history only.
@@ -11,6 +11,8 @@ Minimal reproducible project for defect detection on power-line insulators.
   - pilot val: `40/40`
   - train batch: `200/200`
 - Final clean Stage 3 prompt: `qwen_vlm_labels_v1_prompt_v7f_flashover_unclear_to_unknown_nocroppath`.
+- Best current Stage 4 input candidate: predicted crop context padding `0.30` with Qwen `max_pixels=401408`.
+- Clean Stage 4 actual improved from tight-crop `0.3621` to context-crop `0.3966`; Stage 3 GT-crop ceiling remains `0.4655`.
 - Clean rerun runbook: `docs/leakage_free_rerun_plan.md`.
 - Current milestone: freeze final research tables, visual summaries, and the end-to-end demo path.
 - YOLO remains optional later and is not a current blocking step.
@@ -25,6 +27,8 @@ Key docs:
 - `docs/stage3_vlm_baseline_quickstart.md`
 - `docs/leakage_free_rerun_plan.md`
 - `reports/stage3_final_visual_package.md`
+- `reports/stage4_context_comparison_final/report.md`
+- `reports/stage4_context_padding_capped_result.md`
 - `reports/stage3_prompt_sweep_v6_checkpoint.md`
 - `reports/stage3_v6d_vs_v6f_checkpoint.md`
 

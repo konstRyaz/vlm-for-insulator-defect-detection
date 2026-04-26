@@ -10,6 +10,7 @@ Current clean Stage 4 default:
 
 - VLM model: `Qwen/Qwen2.5-VL-3B-Instruct`
 - prompt version: `qwen_vlm_labels_v1_prompt_v7f_flashover_unclear_to_unknown_nocroppath`
+- best current input-strategy candidate: context padding `0.30` with `max_pixels=401408`
 
 The Stage 4 prompt removes `crop_path` from prompt-visible metadata so the VLM cannot read detector class names from crop folder paths.
 The current clean reference uses the final leakage-free Stage 3 prompt listed above.
@@ -38,6 +39,10 @@ Context-padding ablation notebook:
 
 - `notebooks/stage4_context_pad050_kaggle_run.ipynb`
 - `notebooks/stage4_context_pad030_kaggle_run.ipynb`
+
+Current context comparison report:
+
+- `reports/stage4_context_comparison_final/report.md`
 
 ## 2) Run Stage 4 in one command
 

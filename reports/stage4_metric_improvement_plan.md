@@ -41,10 +41,9 @@ Main coarse error patterns:
 The most important failure is overcalling defects on normal insulators,
 especially `defect_flashover`.
 
-## Next Best Experiment
+## Context Ablation Result
 
-The next experiment should test input context rather than another broad prompt
-sweep.
+The next experiment tested input context rather than another broad prompt sweep.
 
 Recommended comparison:
 
@@ -54,23 +53,27 @@ Recommended comparison:
 | context crop | same predicted/GT box with larger padding | tests whether missing local context causes false flashover |
 | two-view crop | tight crop plus context crop, if the runner can support it minimally | tests whether the VLM needs both detail and context |
 
-The completed context ablation is:
+The completed context ablations are:
 
 - notebook: `notebooks/stage4_context_pad050_kaggle_run.ipynb`
 - run name: `stage4_detector_to_vlm_pred_val_context_pad050_maxpix401k_kaggle`
 - crop padding: `0.50`
 - Qwen visual cap: `max_pixels=401408`
 - prompt: `qwen_vlm_labels_v1_prompt_v7f_flashover_unclear_to_unknown_nocroppath`
-
-The uncapped `padding=0.50` Kaggle run produced 21 Qwen backend OOM errors, so
-the capped rerun is the comparable experiment.
-
-The next notebook is a milder context test:
-
 - notebook: `notebooks/stage4_context_pad030_kaggle_run.ipynb`
 - run name: `stage4_detector_to_vlm_pred_val_context_pad030_maxpix401k_kaggle`
 - crop padding: `0.30`
 - Qwen visual cap: `max_pixels=401408`
+
+The uncapped `padding=0.50` Kaggle run produced 21 Qwen backend OOM errors, so
+the capped rerun is the comparable experiment.
+
+Best current candidate:
+
+- `padding_ratio=0.30`, `max_pixels=401408`
+- pipeline correct rate `0.3966` vs tight-crop `0.3621`
+- helped/hurt: `10` helped objects, `8` hurt objects
+- main remaining bottleneck: flashover-like false positives and flashover recall trade-off
 
 Acceptance signal:
 
