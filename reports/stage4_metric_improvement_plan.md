@@ -54,6 +54,13 @@ Recommended comparison:
 | context crop | same predicted/GT box with larger padding | tests whether missing local context causes false flashover |
 | two-view crop | tight crop plus context crop, if the runner can support it minimally | tests whether the VLM needs both detail and context |
 
+The first runnable ablation is:
+
+- notebook: `notebooks/stage4_context_pad050_kaggle_run.ipynb`
+- run name: `stage4_detector_to_vlm_pred_val_context_pad050_kaggle`
+- crop padding: `0.50`
+- prompt: `qwen_vlm_labels_v1_prompt_v7f_flashover_unclear_to_unknown_nocroppath`
+
 Acceptance signal:
 
 - `insulator_ok -> defect_flashover` should decrease.
@@ -65,4 +72,3 @@ If context does not help, the likely next step is no longer prompt tuning. It
 would be either a rule-assisted VLM baseline or supervised fine-tuning, both of
 which should be reported as separate methods rather than as the frozen Stage 3
 baseline.
-
