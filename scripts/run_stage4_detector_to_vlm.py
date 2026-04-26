@@ -219,6 +219,11 @@ def main() -> None:
         stage3_effective_cfg["backend"].setdefault("qwen_hf", {})
         stage3_effective_cfg["backend"]["qwen_hf"]["model_id"] = model_id.strip()
 
+    qwen_overrides = vlm_cfg.get("qwen_hf", {})
+    if isinstance(qwen_overrides, dict) and qwen_overrides:
+        stage3_effective_cfg["backend"].setdefault("qwen_hf", {})
+        stage3_effective_cfg["backend"]["qwen_hf"].update(qwen_overrides)
+
     prompt_version = vlm_cfg.get("prompt_version")
     if isinstance(prompt_version, str) and prompt_version.strip():
         stage3_effective_cfg["prompt"]["version"] = prompt_version.strip()

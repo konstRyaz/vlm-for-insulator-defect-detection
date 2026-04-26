@@ -57,9 +57,13 @@ Recommended comparison:
 The first runnable ablation is:
 
 - notebook: `notebooks/stage4_context_pad050_kaggle_run.ipynb`
-- run name: `stage4_detector_to_vlm_pred_val_context_pad050_kaggle`
+- run name: `stage4_detector_to_vlm_pred_val_context_pad050_maxpix401k_kaggle`
 - crop padding: `0.50`
+- Qwen visual cap: `max_pixels=401408`
 - prompt: `qwen_vlm_labels_v1_prompt_v7f_flashover_unclear_to_unknown_nocroppath`
+
+The uncapped `padding=0.50` Kaggle run produced 21 Qwen backend OOM errors, so
+the capped rerun is the comparable experiment.
 
 Acceptance signal:
 

@@ -353,6 +353,8 @@ class QwenHFBackend:
         self.temperature = float(cfg.get("temperature", 0.0))
         self.top_p = float(cfg.get("top_p", 1.0))
         self.add_generation_prompt = bool(cfg.get("add_generation_prompt", True))
+        self.min_pixels = self._optional_positive_int(cfg.get("min_pixels"), "backend.qwen_hf.min_pixels")
+        self.max_pixels = self._optional_positive_int(cfg.get("max_pixels"), "backend.qwen_hf.max_pixels")
 
         try:
             import torch  # type: ignore
@@ -379,15 +381,28 @@ class QwenHFBackend:
             self._process_vision_info = None
             self._uses_qwen_vl_utils = False
 
-        self.processor = self.AutoProcessor.from_pretrained(
-            self.model_id,
-            trust_remote_code=self.trust_remote_code,
-        )
+        processor_kwargs: dict[str, Any] = {"trust_remote_code": self.trust_remote_code}
+        if self.min_pixels is not None:
+            processor_kwargs["min_pixels"] = self.min_pixels
+        if self.max_pixels is not None:
+            processor_kwargs["max_pixels"] = self.max_pixels
+        self.processor = self.AutoProcessor.from_pretrained(self.model_id, **processor_kwargs)
         self.model = self._load_model()
         try:
             self.model.eval()
         except Exception:
             pass
+
+    def _optional_positive_int(self, value: Any, field_name: str) -> int | None:
+        if value is None:
+            return None
+        try:
+            parsed = int(value)
+        except (TypeError, ValueError) as exc:
+            raise BackendConfigError(f"{field_name} must be a positive integer if set.") from exc
+        if parsed <= 0:
+            raise BackendConfigError(f"{field_name} must be a positive integer if set.")
+        return parsed
 
     def _resolve_torch_dtype(self, dtype_name: str) -> Any:
         if dtype_name == "auto":
@@ -586,6 +601,8 @@ class QwenHFBackend:
             "temperature": self.temperature,
             "top_p": self.top_p,
             "add_generation_prompt": self.add_generation_prompt,
+            "min_pixels": self.min_pixels,
+            "max_pixels": self.max_pixels,
             "uses_qwen_vl_utils": self._uses_qwen_vl_utils,
         }
 
