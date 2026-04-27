@@ -29,6 +29,8 @@ First compare frozen inference before training anything.
 Candidates:
 
 - Qwen2.5-VL-7B-Instruct, if Kaggle/Colab memory permits;
+- Qwen2.5-VL-7B-Instruct-AWQ, if full 7B is memory-limited;
+- Qwen3-VL-2B-Instruct and Qwen3-VL-4B-Instruct, if the existing runner works with current Transformers support;
 - newer Qwen-VL family checkpoints, if available and compatible with the existing runner;
 - other open VLMs only if they can run on the same cloud GPU budget and produce stable JSON.
 
@@ -74,7 +76,7 @@ Expected value: most likely route to improve flashover/ok semantics, but also th
 ## Recommended Experiment Order
 
 1. Availability audit: which models have public weights, runnable inference code, and a license compatible with this project.
-2. Frozen Qwen scale test: Qwen2.5-VL-7B or the nearest runnable stronger Qwen checkpoint.
+2. Frozen Qwen scale/generalization test: Qwen2.5-VL-7B, 7B-AWQ, and small Qwen3-VL candidates.
 3. Frozen power-domain VLM test: PowerGPT/Power-LLaVA only if weights are usable.
 4. TL-CLIP coarse-only classifier benchmark.
 5. Qwen LoRA/QLoRA supervised fine-tune.
@@ -106,6 +108,8 @@ For CLIP-style models:
 Stop a frozen VLM candidate if it cannot produce stable JSON or cannot run on the target cloud GPU without reducing the input so aggressively that the comparison becomes unfair.
 
 Stop a fine-tune candidate if validation improves only by moving errors around within a tiny number of samples, or if it improves Stage 3 but hurts Stage 4 predicted crops.
+
+On the current 58-object validation slice, do not overinterpret a one-object gain. Prefer candidates that improve macro-F1 and add roughly five or more correct objects before promoting them to Stage 4.
 
 ## Current Research Question
 
