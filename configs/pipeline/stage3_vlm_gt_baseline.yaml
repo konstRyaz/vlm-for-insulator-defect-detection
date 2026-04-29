@@ -1,21 +1,17 @@
 version: 1
 name: stage3_vlm_gt_baseline_v1
-
 input:
   dataset_jsonl: outputs/stage3_regrouped_v2/val/vlm_labels_v1_val_v2.annotated.jsonl
   image_root: null
-
 output:
   root_dir: outputs/stage3_vlm_baseline_runs
   save_raw_payload: true
-
 run:
   run_id: auto
   resume: true
   max_samples: null
   sample_ids_file: null
   fail_fast: false
-
 backend:
   mode: qwen_hf
   fallback_to_mock_if_unavailable: false
@@ -40,7 +36,6 @@ backend:
     max_tokens: 600
     response_format: json_object
     timeout_sec: 120
-
 prompt:
   version: qwen_vlm_labels_v1_prompt_v7f_flashover_unclear_to_unknown_nocroppath
   versions:
@@ -137,32 +132,40 @@ prompt:
     qwen_vlm_labels_v1_prompt_v7g_flashover_surface_attached_plus_unknown_backoff_nocroppath:
       system_path: configs/pipeline/prompts/stage3_vlm_system_v7g_flashover_surface_attached_plus_unknown_backoff.txt
       user_path: configs/pipeline/prompts/stage3_vlm_user_v6d_balanced_notaglock_nocroppath.txt
+    qwen_vlm_labels_v1_prompt_v8a_qwen3_flashover_recall_nocroppath:
+      system_path: configs/pipeline/prompts/stage3_vlm_system_v8a_qwen3_flashover_recall.txt
+      user_path: configs/pipeline/prompts/stage3_vlm_user_v6d_balanced_notaglock_nocroppath.txt
+    qwen_vlm_labels_v1_prompt_v8b_qwen3_flashover_balanced_nocroppath:
+      system_path: configs/pipeline/prompts/stage3_vlm_system_v8b_qwen3_flashover_balanced.txt
+      user_path: configs/pipeline/prompts/stage3_vlm_user_v6d_balanced_notaglock_nocroppath.txt
+    qwen_vlm_labels_v1_prompt_v8c_qwen3_flashover_positive_evidence_nocroppath:
+      system_path: configs/pipeline/prompts/stage3_vlm_system_v8c_qwen3_flashover_positive_evidence.txt
+      user_path: configs/pipeline/prompts/stage3_vlm_user_v6d_balanced_notaglock_nocroppath.txt
   system_path: configs/pipeline/prompts/stage3_vlm_system_v6d_balanced_notaglock.txt
   user_path: configs/pipeline/prompts/stage3_vlm_user_v6d_balanced_notaglock_nocroppath.txt
-
 prediction_contract:
   mode: reduced_subset_v1
   model_predicted_core_fields:
-    - coarse_class
-    - visual_evidence_tags
-    - visibility
-    - short_canonical_description_en
-    - report_snippet_en
+  - coarse_class
+  - visual_evidence_tags
+  - visibility
+  - short_canonical_description_en
+  - report_snippet_en
   model_optional_debug_fields:
-    - annotator_notes
+  - annotator_notes
   derived_fields:
-    - "needs_review = (visibility == 'ambiguous')"
-    - "short_canonical_description = short_canonical_description_en"
-    - "report_snippet = report_snippet_en"
+  - needs_review = (visibility == 'ambiguous')
+  - short_canonical_description = short_canonical_description_en
+  - report_snippet = report_snippet_en
   copied_metadata_fields:
-    - record_id
-    - image_id
-    - box_id
-    - source
-    - split
-    - bbox_xywh
-    - crop_path
-    - image_path
-    - score
-    - category_name
-    - label_version
+  - record_id
+  - image_id
+  - box_id
+  - source
+  - split
+  - bbox_xywh
+  - crop_path
+  - image_path
+  - score
+  - category_name
+  - label_version

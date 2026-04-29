@@ -31,6 +31,8 @@ Key docs:
 - `reports/stage3_final_visual_package.md`
 - `reports/final_research_summary.md`
 - `reports/final_stage4_package/README.md`
+- `reports/stage3_model_sweep_clean/RESULT_SUMMARY.md`
+- `reports/stage3_model_sweep_clean/HYBRID_SIGNAL.md`
 - `reports/stage4_context_comparison_final/report.md`
 - `reports/stage4_context_padding_capped_result.md`
 - `reports/stage3_prompt_sweep_v6_checkpoint.md`
