@@ -14,7 +14,7 @@ Minimal reproducible project for defect detection on power-line insulators.
 - Best current Stage 4 input candidate: predicted crop context padding `0.30` with Qwen `max_pixels=401408`.
 - Clean Stage 4 actual improved from tight-crop `0.3621` to context-crop `0.3966`; Stage 3 GT-crop ceiling remains `0.4655`.
 - Clean rerun runbook: `docs/leakage_free_rerun_plan.md`.
-- Current milestone: final clean Stage 3/4 results are frozen for reporting.
+- Current milestone: final clean Stage 3/4 results are frozen for reporting; the active follow-up branch tests adaptation and hybrid coarse-classification paths.
 - YOLO remains optional later and is not a current blocking step.
 
 Key docs:
@@ -28,6 +28,7 @@ Key docs:
 - `docs/leakage_free_rerun_plan.md`
 - `docs/vlm_expansion_plan.md`
 - `docs/vlm_model_availability_audit.md`
+- `docs/stage3_adaptation_branch_plan.md`
 - `reports/stage3_final_visual_package.md`
 - `reports/final_research_summary.md`
 - `reports/final_stage4_package/README.md`
@@ -228,6 +229,11 @@ python scripts/visualize_stage3_eval_results.py \
 Notebook-oriented Stage 3 quickstart (Kaggle primary, Colab fallback):
 
 - `docs/stage3_vlm_baseline_quickstart.md`
+
+Current Stage 3 follow-up notebooks:
+
+- `notebooks/stage3_clip_hybrid_coarse_benchmark_clean.ipynb`
+- `notebooks/stage3_qwen25vl_3b_lora_smoke_clean.ipynb`
 
 ### 14) Run Stage 4 detector->VLM baseline on predicted boxes
 
