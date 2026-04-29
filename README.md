@@ -33,6 +33,7 @@ Key docs:
 - `reports/final_stage4_package/README.md`
 - `reports/stage3_model_sweep_clean/RESULT_SUMMARY.md`
 - `reports/stage3_model_sweep_clean/HYBRID_SIGNAL.md`
+- `reports/stage3_model_sweep_clean/QWEN3_4B_PROMPT_REPAIR_RESULT.md`
 - `reports/stage4_context_comparison_final/report.md`
 - `reports/stage4_context_padding_capped_result.md`
 - `reports/stage3_prompt_sweep_v6_checkpoint.md`
