@@ -1,0 +1,2 @@
+method,C,class_weight,cv_accuracy,cv_macro_f1_3class,cv_ok_recall,cv_flashover_recall,cv_broken_recall,val_accuracy,val_macro_f1_3class,val_ok_recall,val_flashover_recall,val_broken_recall
+logreg_c10_balanced,10.0,balanced,0.7904761904761906,0.6912081128747796,0.825,0.8,0.5999999999999999,0.5344827586206896,0.3712709670156478,0.59375,0.6,0.0
