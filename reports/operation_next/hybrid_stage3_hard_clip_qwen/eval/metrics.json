@@ -1,0 +1,83 @@
+{
+  "counts": {
+    "gt_total": 58,
+    "evaluated_total": 58,
+    "gt_not_evaluated": 0,
+    "sample_without_gt": 0,
+    "predictions_available_total": 58,
+    "predictions_with_gt": 58,
+    "parsed_with_gt": 58,
+    "missing_prediction_record": 0,
+    "parse_success": 58,
+    "status_ok": 58,
+    "schema_valid_true": 58,
+    "parsed_total": 58,
+    "normalized_subset_valid": 58,
+    "failures_total": 32,
+    "status_counts": {
+      "ok": 58
+    }
+  },
+  "rates": {
+    "evaluated_coverage_over_gt": 1.0,
+    "parse_success_rate": 1.0,
+    "status_ok_rate": 1.0,
+    "schema_valid_rate": 1.0,
+    "coarse_class_accuracy": 0.5344827586206896,
+    "visibility_accuracy": 0.8448275862068966,
+    "needs_review_accuracy": 0.8793103448275862,
+    "tag_exact_match_rate": 0.0,
+    "tag_mean_jaccard": 0.18218390804597703,
+    "pred_ambiguous_rate": 0.2413793103448276,
+    "gt_ambiguous_rate": 0.15517241379310345
+  },
+  "f1": {
+    "coarse_class_macro_f1": 0.22276258020938872,
+    "coarse_class_f1_per_label": {
+      "insulator_ok": 0.6031746031746031,
+      "defect_flashover": 0.5106382978723405,
+      "defect_broken": 0.0,
+      "unknown": 0.0,
+      "other": 0.0
+    },
+    "visibility_macro_f1": 0.5355877616747181,
+    "visibility_f1_per_label": {
+      "clear": 0.9111111111111111,
+      "partial": 0.0,
+      "ambiguous": 0.6956521739130435
+    }
+  },
+  "field_presence_from_parsed_subset": {
+    "counts": {
+      "coarse_class": 58,
+      "visual_evidence_tags": 58,
+      "visibility": 58,
+      "short_canonical_description_en": 58,
+      "report_snippet_en": 58
+    },
+    "rates": {
+      "coarse_class": 1.0,
+      "visual_evidence_tags": 1.0,
+      "visibility": 1.0,
+      "short_canonical_description_en": 1.0,
+      "report_snippet_en": 1.0
+    }
+  },
+  "optional_debug_field_presence_from_parsed_subset": {
+    "counts": {
+      "annotator_notes": 0
+    },
+    "rates": {
+      "annotator_notes": 0.0
+    }
+  },
+  "limitations": {
+    "visual_evidence_tags": "Open-ended labels; exact matching is strict. Jaccard is provided as a conservative overlap signal."
+  },
+  "artifacts": {
+    "review_table_csv": "C:\\Users\\Константин\\Desktop\\vlm-for-insulator-defect-detection\\reports\\operation_next\\hybrid_stage3_hard_clip_qwen\\eval\\review_table.csv",
+    "failures_jsonl": "C:\\Users\\Константин\\Desktop\\vlm-for-insulator-defect-detection\\reports\\operation_next\\hybrid_stage3_hard_clip_qwen\\eval\\failures.jsonl",
+    "confusion_coarse_class_csv": "C:\\Users\\Константин\\Desktop\\vlm-for-insulator-defect-detection\\reports\\operation_next\\hybrid_stage3_hard_clip_qwen\\eval\\confusion_coarse_class.csv",
+    "confusion_visibility_csv": "C:\\Users\\Константин\\Desktop\\vlm-for-insulator-defect-detection\\reports\\operation_next\\hybrid_stage3_hard_clip_qwen\\eval\\confusion_visibility.csv"
+  }
+}
