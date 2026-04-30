@@ -1,0 +1,83 @@
+{
+  "counts": {
+    "gt_total": 58,
+    "evaluated_total": 58,
+    "gt_not_evaluated": 0,
+    "sample_without_gt": 0,
+    "predictions_available_total": 58,
+    "predictions_with_gt": 58,
+    "parsed_with_gt": 58,
+    "missing_prediction_record": 0,
+    "parse_success": 0,
+    "status_ok": 0,
+    "schema_valid_true": 0,
+    "parsed_total": 58,
+    "normalized_subset_valid": 0,
+    "failures_total": 58,
+    "status_counts": {
+      "parse_error": 58
+    }
+  },
+  "rates": {
+    "evaluated_coverage_over_gt": 1.0,
+    "parse_success_rate": 0.0,
+    "status_ok_rate": 0.0,
+    "schema_valid_rate": 0.0,
+    "coarse_class_accuracy": 0.0,
+    "visibility_accuracy": 0.15517241379310345,
+    "needs_review_accuracy": 0.15517241379310345,
+    "tag_exact_match_rate": 0.0,
+    "tag_mean_jaccard": 0.06609195402298851,
+    "pred_ambiguous_rate": 1.0,
+    "gt_ambiguous_rate": 0.15517241379310345
+  },
+  "f1": {
+    "coarse_class_macro_f1": 0.0,
+    "coarse_class_f1_per_label": {
+      "insulator_ok": 0.0,
+      "defect_flashover": 0.0,
+      "defect_broken": 0.0,
+      "unknown": 0.0,
+      "other": 0.0
+    },
+    "visibility_macro_f1": 0.08955223880597014,
+    "visibility_f1_per_label": {
+      "clear": 0.0,
+      "partial": 0.0,
+      "ambiguous": 0.26865671641791045
+    }
+  },
+  "field_presence_from_parsed_subset": {
+    "counts": {
+      "coarse_class": 58,
+      "visual_evidence_tags": 58,
+      "visibility": 58,
+      "short_canonical_description_en": 58,
+      "report_snippet_en": 58
+    },
+    "rates": {
+      "coarse_class": 1.0,
+      "visual_evidence_tags": 1.0,
+      "visibility": 1.0,
+      "short_canonical_description_en": 1.0,
+      "report_snippet_en": 1.0
+    }
+  },
+  "optional_debug_field_presence_from_parsed_subset": {
+    "counts": {
+      "annotator_notes": 0
+    },
+    "rates": {
+      "annotator_notes": 0.0
+    }
+  },
+  "limitations": {
+    "visual_evidence_tags": "Open-ended labels; exact matching is strict. Jaccard is provided as a conservative overlap signal."
+  },
+  "artifacts": {
+    "review_table_csv": "/kaggle/working/vlm-for-insulator-defect-detection/outputs/stage3_vlm_baseline_runs/stage3_qwen25vl_3b_lora_smoke_clean/eval/review_table.csv",
+    "failures_jsonl": "/kaggle/working/vlm-for-insulator-defect-detection/outputs/stage3_vlm_baseline_runs/stage3_qwen25vl_3b_lora_smoke_clean/eval/failures.jsonl",
+    "confusion_coarse_class_csv": "/kaggle/working/vlm-for-insulator-defect-detection/outputs/stage3_vlm_baseline_runs/stage3_qwen25vl_3b_lora_smoke_clean/eval/confusion_coarse_class.csv",
+    "confusion_visibility_csv": "/kaggle/working/vlm-for-insulator-defect-detection/outputs/stage3_vlm_baseline_runs/stage3_qwen25vl_3b_lora_smoke_clean/eval/confusion_visibility.csv"
+  }
+}
