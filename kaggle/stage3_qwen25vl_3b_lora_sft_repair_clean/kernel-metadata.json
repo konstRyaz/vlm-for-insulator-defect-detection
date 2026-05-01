@@ -1,0 +1,13 @@
+{
+  "id": "kostyaryazanov/stage3-qwen25vl-lora-sft-repair-clean",
+  "title": "stage3-qwen25vl-lora-sft-repair-clean",
+  "code_file": "stage3_qwen25vl_3b_lora_sft_repair_clean.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_internet": "true",
+  "dataset_sources": [
+    "kostyaryazanov/idid-coco-v3"
+  ]
+}

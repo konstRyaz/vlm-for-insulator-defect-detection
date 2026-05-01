@@ -1,11 +1,13 @@
 # Active Kaggle VLM triage runs
 
-Updated: 2026-05-01 20:42:08 local
+Updated: 2026-05-01 20:55:58 local
 
-No active Kaggle VLM comparison runs.
+Active run:
 
-Decision from the archived comparison plan:
+- `kostyaryazanov/stage3-qwen25vl-lora-sft-repair-clean`
+  - status at launch: RUNNING
+  - purpose: repaired Qwen2.5-VL-3B LoRA/SFT smoke with overfit gate before full clean val
+  - expected time: 25-45 min if overfit gate fails, 70-120 min if full val starts
+  - output archive: `stage3_deliverables_qwen25vl_3b_lora_sft_repair_clean.tar.gz`
 
-- frozen VLM comparison is closed for now;
-- no InternVL/LLaVA/SmolVLM/Phi Stage 4 promotion because the Stage 3 promotion gate was not met;
-- next work should move to domain adaptation or a hybrid classifier/reporter rather than more broad frozen VLM sweeps.
+Frozen VLM comparison decision remains unchanged: no non-Qwen frozen reporter was promoted to Stage 4.
