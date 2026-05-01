@@ -1,0 +1,11 @@
+{
+  "policy": "flash_lowconf_second_best_cv0p35",
+  "selected_threshold": 0.35,
+  "accuracy": 0.5517241379310345,
+  "correct": 32,
+  "total": 58,
+  "macro_f1": 0.5765540258656654,
+  "recall_insulator_ok": 0.40625,
+  "recall_defect_flashover": 0.65,
+  "recall_defect_broken": 1.0
+}

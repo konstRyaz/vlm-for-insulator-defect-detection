@@ -1,0 +1,2 @@
+policy,selected_C,selected_policy,selected_threshold,baseline_pipeline_correct,baseline_pipeline_rate,hybrid_pipeline_correct,hybrid_pipeline_rate,delta_correct,delta_rate,hybrid_vlm_correct_on_good
+cvgrid_C1_second_best_t0p38,1.0,second_best,0.38,23,0.39655172413793105,31,0.5344827586206896,8,0.13793103448275856,31

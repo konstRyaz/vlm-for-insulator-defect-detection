@@ -1,0 +1,35 @@
+[
+  {
+    "policy": "hard_dinov2",
+    "selected_threshold": 0.35,
+    "baseline_pipeline_correct": 23,
+    "baseline_pipeline_rate": 0.39655172413793105,
+    "hybrid_pipeline_correct": 28,
+    "hybrid_pipeline_rate": 0.4827586206896552,
+    "delta_correct": 5,
+    "delta_rate": 0.08620689655172414,
+    "hybrid_vlm_correct_on_good": 28
+  },
+  {
+    "policy": "dinov2_flash_lowconf_second_best_cv0p35",
+    "selected_threshold": 0.35,
+    "baseline_pipeline_correct": 23,
+    "baseline_pipeline_rate": 0.39655172413793105,
+    "hybrid_pipeline_correct": 34,
+    "hybrid_pipeline_rate": 0.5862068965517241,
+    "delta_correct": 11,
+    "delta_rate": 0.18965517241379304,
+    "hybrid_vlm_correct_on_good": 34
+  },
+  {
+    "policy": "qwen_ok_veto_flash_cv0p35",
+    "selected_threshold": 0.35,
+    "baseline_pipeline_correct": 23,
+    "baseline_pipeline_rate": 0.39655172413793105,
+    "hybrid_pipeline_correct": 27,
+    "hybrid_pipeline_rate": 0.46551724137931033,
+    "delta_correct": 4,
+    "delta_rate": 0.06896551724137928,
+    "hybrid_vlm_correct_on_good": 27
+  }
+]

@@ -1,0 +1,15 @@
+[
+  {
+    "policy": "cvgrid_C1_second_best_t0p38",
+    "selected_C": 1.0,
+    "selected_policy": "second_best",
+    "selected_threshold": 0.38,
+    "baseline_pipeline_correct": 23,
+    "baseline_pipeline_rate": 0.39655172413793105,
+    "hybrid_pipeline_correct": 31,
+    "hybrid_pipeline_rate": 0.5344827586206896,
+    "delta_correct": 8,
+    "delta_rate": 0.13793103448275856,
+    "hybrid_vlm_correct_on_good": 31
+  }
+]

@@ -1,0 +1,4 @@
+,insulator_ok,defect_flashover,defect_broken
+insulator_ok,6,24,2
+defect_flashover,0,19,1
+defect_broken,0,2,4

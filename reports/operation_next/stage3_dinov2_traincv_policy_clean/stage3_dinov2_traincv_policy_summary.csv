@@ -1,0 +1,3 @@
+policy,selected_threshold,accuracy,correct,total,macro_f1,recall_insulator_ok,recall_defect_flashover,recall_defect_broken
+flash_lowconf_second_best_cv0p35,0.35,0.5517241379310345,32,58,0.5765540258656654,0.40625,0.65,1.0
+hard_dinov2,0.35,0.5,29,58,0.5052631578947369,0.1875,0.95,0.6666666666666666

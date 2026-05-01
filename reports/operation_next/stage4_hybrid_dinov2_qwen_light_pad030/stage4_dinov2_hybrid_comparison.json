@@ -1,0 +1,9 @@
+{
+  "baseline_pipeline_correct": 23,
+  "baseline_pipeline_rate": 0.39655172413793105,
+  "hybrid_pipeline_correct": 28,
+  "hybrid_pipeline_rate": 0.4827586206896552,
+  "delta_correct": 5,
+  "delta_rate": 0.08620689655172414,
+  "hybrid_vlm_correct_on_good": 28
+}

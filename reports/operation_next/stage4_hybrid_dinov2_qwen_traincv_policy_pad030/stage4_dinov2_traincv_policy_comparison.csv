@@ -1,0 +1,4 @@
+policy,selected_threshold,baseline_pipeline_correct,baseline_pipeline_rate,hybrid_pipeline_correct,hybrid_pipeline_rate,delta_correct,delta_rate,hybrid_vlm_correct_on_good
+dinov2_flash_lowconf_second_best_cv0p35,0.35,23,0.39655172413793105,34,0.5862068965517241,11,0.18965517241379304,34
+hard_dinov2,0.35,23,0.39655172413793105,28,0.4827586206896552,5,0.08620689655172414,28
+qwen_ok_veto_flash_cv0p35,0.35,23,0.39655172413793105,27,0.46551724137931033,4,0.06896551724137928,27

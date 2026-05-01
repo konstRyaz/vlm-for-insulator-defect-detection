@@ -1,0 +1,16 @@
+{
+  "counts": {
+    "detector_miss": 0,
+    "bad_crop_from_detector": 1,
+    "vlm_error_on_good_pred_crop": 26,
+    "routing_or_filtering_error": 0,
+    "correct_pipeline_hit": 31
+  },
+  "rates": {
+    "detector_miss": 0.0,
+    "bad_crop_from_detector": 0.017241379310344827,
+    "vlm_error_on_good_pred_crop": 0.4482758620689655,
+    "routing_or_filtering_error": 0.0,
+    "correct_pipeline_hit": 0.5344827586206896
+  }
+}

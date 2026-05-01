@@ -1,0 +1,22 @@
+{
+  "counts": {
+    "gt_objects_total": 58,
+    "detector_found_total": 58,
+    "good_crop_total": 57,
+    "vlm_correct_on_good_crop_total": 27,
+    "pipeline_correct_total": 27,
+    "ceiling_correct_total": 0
+  },
+  "rates": {
+    "detector_match_rate": 1.0,
+    "good_crop_rate_among_matched": 0.9827586206896551,
+    "vlm_correct_rate_among_good_pred_crops": 0.47368421052631576,
+    "pipeline_correct_rate": 0.46551724137931033,
+    "ceiling_correct_rate": 0.0,
+    "ceiling_vs_actual_gap": -0.46551724137931033
+  },
+  "thresholds": {
+    "match_iou_threshold": 0.5,
+    "good_crop_iou_threshold": 0.7
+  }
+}

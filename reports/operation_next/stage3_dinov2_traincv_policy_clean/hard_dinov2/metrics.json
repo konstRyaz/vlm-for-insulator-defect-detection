@@ -1,0 +1,11 @@
+{
+  "policy": "hard_dinov2",
+  "selected_threshold": 0.35,
+  "accuracy": 0.5,
+  "correct": 29,
+  "total": 58,
+  "macro_f1": 0.5052631578947369,
+  "recall_insulator_ok": 0.1875,
+  "recall_defect_flashover": 0.95,
+  "recall_defect_broken": 0.6666666666666666
+}

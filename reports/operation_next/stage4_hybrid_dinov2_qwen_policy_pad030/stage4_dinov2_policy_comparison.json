@@ -1,0 +1,22 @@
+[
+  {
+    "policy": "hard_dinov2",
+    "baseline_pipeline_correct": 23,
+    "baseline_pipeline_rate": 0.39655172413793105,
+    "hybrid_pipeline_correct": 28,
+    "hybrid_pipeline_rate": 0.4827586206896552,
+    "delta_correct": 5,
+    "delta_rate": 0.08620689655172414,
+    "hybrid_vlm_correct_on_good": 28
+  },
+  {
+    "policy": "qwen_ok_veto_flash_lt034",
+    "baseline_pipeline_correct": 23,
+    "baseline_pipeline_rate": 0.39655172413793105,
+    "hybrid_pipeline_correct": 29,
+    "hybrid_pipeline_rate": 0.5,
+    "delta_correct": 6,
+    "delta_rate": 0.10344827586206895,
+    "hybrid_vlm_correct_on_good": 29
+  }
+]
