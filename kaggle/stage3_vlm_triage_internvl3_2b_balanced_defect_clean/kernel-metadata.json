@@ -1,0 +1,13 @@
+{
+  "id": "kostyaryazanov/stage3-internvl-balanced-defect",
+  "title": "stage3-internvl-balanced-defect",
+  "code_file": "stage3_vlm_triage_internvl3_2b_balanced_defect_clean.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_internet": "true",
+  "dataset_sources": [
+    "kostyaryazanov/idid-coco-v3"
+  ]
+}

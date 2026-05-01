@@ -1,0 +1,13 @@
+{
+  "id": "kostyaryazanov/stage3-vlm-triage-smolvlm2-2b-clean",
+  "title": "stage3-vlm-triage-smolvlm2-2b-clean",
+  "code_file": "stage3_vlm_triage_smolvlm2_2b_clean.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_internet": "true",
+  "dataset_sources": [
+    "kostyaryazanov/idid-coco-v3"
+  ]
+}

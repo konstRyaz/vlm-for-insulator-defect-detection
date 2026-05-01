@@ -1,0 +1,13 @@
+{
+  "id": "kostyaryazanov/stage3-vlm-triage-internvl3-2b-defect-recall-clean",
+  "title": "stage3-vlm-triage-internvl3-2b-defect-recall-clean",
+  "code_file": "stage3_vlm_triage_internvl3_2b_defect_recall_clean.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_internet": "true",
+  "dataset_sources": [
+    "kostyaryazanov/idid-coco-v3"
+  ]
+}
