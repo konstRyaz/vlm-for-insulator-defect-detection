@@ -51,3 +51,24 @@ The current champion is not a production-ready detector by itself. It still has 
 ## Current Recommendation
 
 Freeze `stage4_dinov2_packfix_secondbest035` as the current main Stage 4 research result. Continue with analysis tooling and reporting discipline before launching more model sweeps.
+
+## Update - 2026-05-02
+
+The LoRA/SFT repair branch completed. It fixed JSON stability but did not produce a useful classifier:
+
+- parse/schema after corrected artifact contract: `1.0000 / 1.0000`;
+- coarse accuracy: `0.5172`;
+- coarse macro-F1: `0.1579`;
+- flashover recall: `1/20`;
+- broken recall: `0/6`.
+
+Decision: do not promote LoRA to Stage 4. Treat it as a negative adaptation checkpoint: the model learned output format but collapsed toward `insulator_ok`.
+
+The three analysis-tooling items from the plan were also completed for the Stage 4 DINOv2 champion:
+
+- paired statistics: `reports/operation_next/paired_stage4_qwen_vs_dinov2_champion/paired_summary.md`;
+- no-leak audit: `reports/operation_next/no_leak_audit_stage4_champion/no_leak_audit_summary.md`;
+- visual helped/hurt review: `reports/operation_next/paired_stage4_qwen_vs_dinov2_champion/visual_review.html`.
+
+Current recommendation remains: freeze `stage4_dinov2_packfix_secondbest035` as the main Stage 4 research result. Do not launch more broad GPU sweeps until a specific hypothesis targets the remaining ok-vs-flashover errors or a larger clean validation set is available.
+
