@@ -1,0 +1,98 @@
+[
+  {
+    "kind": "final_report",
+    "path": "reports\\final_operation_package_2026-05-02\\FINAL_OPERATION_REPORT.md",
+    "exists": true,
+    "size_bytes": 6421
+  },
+  {
+    "kind": "leaderboard",
+    "path": "reports\\operation_next\\leaderboard.md",
+    "exists": true,
+    "size_bytes": 3532
+  },
+  {
+    "kind": "registry",
+    "path": "reports\\operation_next\\experiment_registry.csv",
+    "exists": true,
+    "size_bytes": 15168
+  },
+  {
+    "kind": "stage4_champion_summary",
+    "path": "reports\\operation_next\\stage4_dinov2_champion_analysis.md",
+    "exists": true,
+    "size_bytes": 7852
+  },
+  {
+    "kind": "paired_summary",
+    "path": "reports\\operation_next\\paired_stage4_qwen_vs_dinov2_champion\\paired_summary.md",
+    "exists": true,
+    "size_bytes": 516
+  },
+  {
+    "kind": "paired_cases",
+    "path": "reports\\operation_next\\paired_stage4_qwen_vs_dinov2_champion\\paired_cases.csv",
+    "exists": true,
+    "size_bytes": 8613
+  },
+  {
+    "kind": "visual_review",
+    "path": "reports\\operation_next\\paired_stage4_qwen_vs_dinov2_champion\\visual_review.html",
+    "exists": true,
+    "size_bytes": 576155
+  },
+  {
+    "kind": "no_leak_audit",
+    "path": "reports\\operation_next\\no_leak_audit_stage4_champion\\no_leak_audit_summary.md",
+    "exists": true,
+    "size_bytes": 261
+  },
+  {
+    "kind": "vlm_comparison_summary",
+    "path": "reports\\vlm_comparison\\final_vlm_comparison_summary.md",
+    "exists": true,
+    "size_bytes": 4142
+  },
+  {
+    "kind": "specialized_model_audit",
+    "path": "reports\\vlm_comparison\\specialized_models_deep_audit_2026-05-02.md",
+    "exists": true,
+    "size_bytes": 3729
+  },
+  {
+    "kind": "lora_repair_result",
+    "path": "reports\\stage3_adaptation_branch\\QWEN_LORA_SFT_REPAIR_RESULT.md",
+    "exists": true,
+    "size_bytes": 2802
+  },
+  {
+    "kind": "operation_plan_sync",
+    "path": "reports\\operation_next\\operation_plan_sync_2026-05-01.md",
+    "exists": true,
+    "size_bytes": 5816
+  },
+  {
+    "kind": "model_registry",
+    "path": "configs\\vlm_models_registry.yaml",
+    "exists": true,
+    "size_bytes": 9895
+  },
+  {
+    "kind": "paired_script",
+    "path": "scripts\\analyze_stage4_paired_cases.py",
+    "exists": true,
+    "size_bytes": 7251
+  },
+  {
+    "kind": "no_leak_script",
+    "path": "scripts\\audit_no_leak_stage3_stage4.py",
+    "exists": true,
+    "size_bytes": 4413
+  },
+  {
+    "kind": "visual_review_script",
+    "path": "scripts\\build_stage4_visual_review.py",
+    "exists": true,
+    "size_bytes": 6110
+  }
+]

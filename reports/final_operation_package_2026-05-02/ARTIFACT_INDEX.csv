@@ -1,0 +1,17 @@
+kind,path,exists,size_bytes
+final_report,reports\final_operation_package_2026-05-02\FINAL_OPERATION_REPORT.md,True,6421
+leaderboard,reports\operation_next\leaderboard.md,True,3532
+registry,reports\operation_next\experiment_registry.csv,True,15168
+stage4_champion_summary,reports\operation_next\stage4_dinov2_champion_analysis.md,True,7852
+paired_summary,reports\operation_next\paired_stage4_qwen_vs_dinov2_champion\paired_summary.md,True,516
+paired_cases,reports\operation_next\paired_stage4_qwen_vs_dinov2_champion\paired_cases.csv,True,8613
+visual_review,reports\operation_next\paired_stage4_qwen_vs_dinov2_champion\visual_review.html,True,576155
+no_leak_audit,reports\operation_next\no_leak_audit_stage4_champion\no_leak_audit_summary.md,True,261
+vlm_comparison_summary,reports\vlm_comparison\final_vlm_comparison_summary.md,True,4142
+specialized_model_audit,reports\vlm_comparison\specialized_models_deep_audit_2026-05-02.md,True,3729
+lora_repair_result,reports\stage3_adaptation_branch\QWEN_LORA_SFT_REPAIR_RESULT.md,True,2802
+operation_plan_sync,reports\operation_next\operation_plan_sync_2026-05-01.md,True,5816
+model_registry,configs\vlm_models_registry.yaml,True,9895
+paired_script,scripts\analyze_stage4_paired_cases.py,True,7251
+no_leak_script,scripts\audit_no_leak_stage3_stage4.py,True,4413
+visual_review_script,scripts\build_stage4_visual_review.py,True,6110
