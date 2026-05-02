@@ -42,3 +42,8 @@ The validation slice has 58 GT objects, so one object changes accuracy by about 
 ## Decision
 
 Freeze this frozen-VLM comparison checkpoint. Do not launch Stage 4 for InternVL/LLaVA/SmolVLM/Phi from these runs. The next operation should be one of two branches: Qwen LoRA/QLoRA on the clean split, or a clean hybrid system where a discriminative coarse classifier supplies `coarse_class` and Qwen remains the structured reporter.
+
+## Specialized Model Audit Update
+
+A follow-up audit on 2026-05-02 checked TL-CLIP, PowerGPT, and Power-LLaVA. No public runnable, provenance-clear checkpoint/API was found for these three models. They remain related-work or future-work candidates, not executed baselines. See `reports/vlm_comparison/specialized_models_deep_audit_2026-05-02.md`.
+
