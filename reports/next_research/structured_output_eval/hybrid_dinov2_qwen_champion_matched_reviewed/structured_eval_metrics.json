@@ -1,0 +1,78 @@
+{
+  "run_name": "hybrid_dinov2_qwen_champion_matched_reviewed",
+  "paths": {
+    "gt_jsonl": "outputs\\stage3_regrouped_v2\\val\\vlm_labels_v1_val_v2.annotated.jsonl",
+    "pred_jsonl": "reports\\next_research\\structured_output_eval\\_matched_predictions\\hybrid_dinov2_qwen_champion_matched_predictions.jsonl",
+    "sample_results_jsonl": null,
+    "manual_review_csv": "reports\\next_research\\structured_output_eval\\hybrid_dinov2_qwen_champion_matched\\manual_review_filled_draft.csv"
+  },
+  "counts": {
+    "gt_total": 58,
+    "pred_total": 58,
+    "evaluated_total": 58,
+    "missing_predictions": 0,
+    "extra_predictions_without_gt": 0
+  },
+  "rates": {
+    "coarse_class_accuracy": 0.5862068965517241,
+    "visibility_accuracy": 0.7931034482758621,
+    "needs_review_accuracy": 0.8448275862068966,
+    "tag_exact_rate": 0.0,
+    "tag_mean_jaccard": 0.1442528735632184,
+    "description_present_rate": 1.0,
+    "description_generic_auto_rate": 0.017241379310344827
+  },
+  "manual_scores": {
+    "manual_tag_score": {
+      "n_scored": 58,
+      "mean": 0.4827586206896552,
+      "score_counts": {
+        "0": 35,
+        "1": 18,
+        "2": 5
+      }
+    },
+    "manual_description_relevance": {
+      "n_scored": 58,
+      "mean": 1.5862068965517242,
+      "score_counts": {
+        "2": 34,
+        "1": 24
+      }
+    },
+    "manual_visual_evidence_score": {
+      "n_scored": 58,
+      "mean": 0.4827586206896552,
+      "score_counts": {
+        "0": 35,
+        "1": 18,
+        "2": 5
+      }
+    },
+    "manual_hallucination_score": {
+      "n_scored": 58,
+      "mean": 0.9655172413793104,
+      "score_counts": {
+        "2": 19,
+        "1": 18,
+        "0": 21
+      }
+    },
+    "manual_usefulness_score": {
+      "n_scored": 58,
+      "mean": 1.5862068965517242,
+      "score_counts": {
+        "2": 34,
+        "1": 24
+      }
+    },
+    "manual_class_text_consistency": {
+      "n_scored": 58,
+      "mean": 1.2758620689655173,
+      "score_counts": {
+        "2": 37,
+        "0": 21
+      }
+    }
+  }
+}

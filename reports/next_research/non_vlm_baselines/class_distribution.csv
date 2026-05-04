@@ -1,0 +1,7 @@
+split,label,count
+train,insulator_ok,80
+train,defect_flashover,10
+train,defect_broken,15
+val,insulator_ok,32
+val,defect_flashover,20
+val,defect_broken,6

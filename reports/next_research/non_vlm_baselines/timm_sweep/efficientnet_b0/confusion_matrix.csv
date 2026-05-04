@@ -1,0 +1,4 @@
+gt\pred,insulator_ok,defect_flashover,defect_broken,unknown,other,__missing__
+insulator_ok,22,7,3,0,0,0
+defect_flashover,10,10,0,0,0,0
+defect_broken,1,1,4,0,0,0

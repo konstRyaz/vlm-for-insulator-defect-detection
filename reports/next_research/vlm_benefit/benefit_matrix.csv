@@ -1,0 +1,6 @@
+system,uses_vlm,uses_train,output_type,accuracy,macro_f1,json_output,description_output,recommended_role,source_run
+best_non_vlm_classifier,no,yes_classifier_train_cv,class_only,0.6551724137931034,0.6683501683501684,no,no,class-only CV baseline,non_vlm_dinov2_base_logreg
+stage3_qwen_val_v2_clean_final,yes,no_zero_shot,JSON+class,0.4655,0.2882_eval5 / 0.4804_3class,yes,yes_if_qwen_reporter_fields_available,direct/frozen VLM structured reporter,stage3_qwen_val_v2_clean_final
+stage4_context_pad030_maxpix401k,yes,no_zero_shot,JSON+class,0.3966,,unknown,yes_if_qwen_reporter_fields_available,direct/frozen VLM structured reporter,stage4_context_pad030_maxpix401k
+stage4_dinov2_packfix_secondbest035,partial_qwen_reporter,yes_classifier_branch,JSON+class,0.5862,0.5922_3class / 0.4441_all_with_nan,yes,yes_if_qwen_reporter_fields_available,hybrid classifier+reporter,stage4_dinov2_packfix_secondbest035
+stage3_vlm_backbone_internvl3_2b_base,yes,no_zero_shot,JSON+class,0.5517,0.2853,yes,yes_if_qwen_reporter_fields_available,direct/frozen VLM structured reporter,stage3_vlm_backbone_internvl3_2b_base
