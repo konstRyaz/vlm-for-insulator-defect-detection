@@ -4,11 +4,11 @@ This folder closes the next research block requested after the Stage 3/4 checkpo
 
 ## Completed blocks
 
-- `protocol/` ? train/validation protocol and overlap audit.
-- `non_vlm_baselines/` ? DINOv2/CLIP/SigLIP/timm feature classifiers with train-CV selection.
-- `structured_output_eval/` ? automatic and draft rubric evaluation of VLM JSON/report fields.
-- `vlm_benefit/` ? comparison of class accuracy versus structured-reporting value.
-- `accuracy_ablation/flashover_binary/` ? targeted `insulator_ok` vs `defect_flashover` diagnostic.
+- `protocol/` - train/validation protocol and overlap audit.
+- `non_vlm_baselines/` - DINOv2/CLIP/SigLIP/timm feature classifiers with train-CV selection.
+- `structured_output_eval/` - automatic and draft rubric evaluation of VLM JSON/report fields.
+- `vlm_benefit/` - comparison of class accuracy versus structured-reporting value.
+- `accuracy_ablation/flashover_binary/` - targeted `insulator_ok` vs `defect_flashover` diagnostic.
 
 ## Main numbers
 
