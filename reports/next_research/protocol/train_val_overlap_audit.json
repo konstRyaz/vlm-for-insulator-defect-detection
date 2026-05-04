@@ -1,0 +1,21 @@
+{
+  "train_jsonl": "outputs\\stage3_regrouped_v2\\train_balanced\\vlm_labels_v1_train_balanced_v2.annotated.jsonl",
+  "val_jsonl": "outputs\\stage3_regrouped_v2\\val\\vlm_labels_v1_val_v2.annotated.jsonl",
+  "counts": {
+    "train_total": 105,
+    "val_total": 58,
+    "train_unique_record_ids": 105,
+    "val_unique_record_ids": 58
+  },
+  "overlaps": {
+    "record_id": [],
+    "crop_path_exact": [],
+    "crop_basename": [],
+    "image_id": [],
+    "image_id_bbox_rounded": []
+  },
+  "warnings": {
+    "suspicious_crop_path_rows": 163,
+    "class_path_warning": "Class-like tokens in crop_path are not a failure by themselves, but crop_path must not be shown to VLM prompts."
+  }
+}

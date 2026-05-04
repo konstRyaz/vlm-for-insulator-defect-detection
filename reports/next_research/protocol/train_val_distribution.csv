@@ -1,0 +1,9 @@
+split,label,count,rate
+train,insulator_ok,80,0.7619047619047619
+train,defect_flashover,10,0.09523809523809523
+train,defect_broken,15,0.14285714285714285
+train,unknown,0,0.0
+val,insulator_ok,32,0.5517241379310345
+val,defect_flashover,20,0.3448275862068966
+val,defect_broken,6,0.10344827586206896
+val,unknown,0,0.0

@@ -1,0 +1,10 @@
+{
+  "labels": [
+    "insulator_ok",
+    "defect_flashover",
+    "defect_broken"
+  ],
+  "train_jsonl": "outputs\\stage3_regrouped_v2\\train_balanced\\vlm_labels_v1_train_balanced_v2.annotated.jsonl",
+  "val_jsonl": "outputs\\stage3_regrouped_v2\\val\\vlm_labels_v1_val_v2.annotated.jsonl",
+  "results": []
+}

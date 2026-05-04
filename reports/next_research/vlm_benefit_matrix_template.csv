@@ -1,0 +1,5 @@
+system,uses_vlm,uses_train,output_type,class_accuracy,macro_f1,json_valid,schema_valid,tag_jaccard,description_score,hallucination_score,usefulness_score,recommended_role
+qwen_direct,yes,no,JSON+class,,,,,,,,,baseline structured reporter
+best_non_vlm_classifier,no,yes,class only,,,,n/a,n/a,n/a,n/a,n/a,classifier baseline
+hybrid_dinov2_qwen,yes_partial,yes,JSON+class,,,,,,,,,main practical system
+internvl_direct,yes,no,JSON+class,,,,,,,,,alternative VLM if valid

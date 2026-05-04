@@ -1,0 +1,57 @@
+{
+  "run_name": "hybrid_dinov2_qwen_champion",
+  "paths": {
+    "gt_jsonl": "outputs\\stage3_regrouped_v2\\val\\vlm_labels_v1_val_v2.annotated.jsonl",
+    "pred_jsonl": "reports\\operation_next\\stage4_dinov2_packfix\\secondbest_cv0p35\\predictions_vlm_labels_v1.jsonl",
+    "sample_results_jsonl": null,
+    "manual_review_csv": null
+  },
+  "counts": {
+    "gt_total": 58,
+    "pred_total": 215,
+    "evaluated_total": 0,
+    "missing_predictions": 58,
+    "extra_predictions_without_gt": 215
+  },
+  "rates": {
+    "coarse_class_accuracy": 0.0,
+    "visibility_accuracy": 0.0,
+    "needs_review_accuracy": 0.0,
+    "tag_exact_rate": 0.0,
+    "tag_mean_jaccard": 0.0,
+    "description_present_rate": 0.0,
+    "description_generic_auto_rate": 0.0
+  },
+  "manual_scores": {
+    "manual_tag_score": {
+      "n_scored": 0,
+      "mean": 0.0,
+      "score_counts": {}
+    },
+    "manual_description_relevance": {
+      "n_scored": 0,
+      "mean": 0.0,
+      "score_counts": {}
+    },
+    "manual_visual_evidence_score": {
+      "n_scored": 0,
+      "mean": 0.0,
+      "score_counts": {}
+    },
+    "manual_hallucination_score": {
+      "n_scored": 0,
+      "mean": 0.0,
+      "score_counts": {}
+    },
+    "manual_usefulness_score": {
+      "n_scored": 0,
+      "mean": 0.0,
+      "score_counts": {}
+    },
+    "manual_class_text_consistency": {
+      "n_scored": 0,
+      "mean": 0.0,
+      "score_counts": {}
+    }
+  }
+}

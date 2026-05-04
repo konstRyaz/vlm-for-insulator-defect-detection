@@ -1,0 +1,11 @@
+field,auto_or_manual,score_range,score_0,score_1,score_2,notes
+json_parse,auto,0/1,invalid_json,,valid_json,from sample_results or parser
+schema_valid,auto,0/1,not_schema_valid,,schema_valid,against vlm_labels_v1
+coarse_class,auto,0/1,wrong_class,,correct_class,main classification metric
+visibility,auto,0/1,wrong_visibility,,correct_visibility,if GT available
+visual_evidence_tags,auto+manual,0/1/2,tags_wrong_or_empty,partly_correct,correct_and_specific,use Jaccard plus human score
+short_description_relevance,manual,0/1/2,not_related_to_crop,generic_or_partly_related,relevant_to_visible_crop,human rubric
+visual_evidence_specificity,manual,0/1/2,no_visible_evidence,very_general_evidence,specific_visible_evidence,human rubric
+hallucination,manual,0/1/2,clear_hallucination,uncertain_or_minor,no_clear_hallucination,higher is better
+usefulness,manual,0/1/2,not_useful,partly_useful,useful_for_review,human rubric
+class_text_consistency,auto+manual,0/1/2,text_contradicts_class,weakly_consistent,consistent_with_class,important for hybrid class override

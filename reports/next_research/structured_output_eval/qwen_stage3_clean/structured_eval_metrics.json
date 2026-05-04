@@ -1,0 +1,57 @@
+{
+  "run_name": "qwen_stage3_clean",
+  "paths": {
+    "gt_jsonl": "outputs\\stage3_regrouped_v2\\val\\vlm_labels_v1_val_v2.annotated.jsonl",
+    "pred_jsonl": "outputs\\_external_runs\\stage3_clean_final_v7f\\predictions_vlm_labels_v1.jsonl",
+    "sample_results_jsonl": "outputs\\_external_runs\\stage3_clean_final_v7f\\sample_results.jsonl",
+    "manual_review_csv": null
+  },
+  "counts": {
+    "gt_total": 58,
+    "pred_total": 58,
+    "evaluated_total": 58,
+    "missing_predictions": 0,
+    "extra_predictions_without_gt": 0
+  },
+  "rates": {
+    "coarse_class_accuracy": 0.46551724137931033,
+    "visibility_accuracy": 0.8448275862068966,
+    "needs_review_accuracy": 0.8793103448275862,
+    "tag_exact_rate": 0.0,
+    "tag_mean_jaccard": 0.182183908045977,
+    "description_present_rate": 1.0,
+    "description_generic_auto_rate": 0.05172413793103448
+  },
+  "manual_scores": {
+    "manual_tag_score": {
+      "n_scored": 0,
+      "mean": 0.0,
+      "score_counts": {}
+    },
+    "manual_description_relevance": {
+      "n_scored": 0,
+      "mean": 0.0,
+      "score_counts": {}
+    },
+    "manual_visual_evidence_score": {
+      "n_scored": 0,
+      "mean": 0.0,
+      "score_counts": {}
+    },
+    "manual_hallucination_score": {
+      "n_scored": 0,
+      "mean": 0.0,
+      "score_counts": {}
+    },
+    "manual_usefulness_score": {
+      "n_scored": 0,
+      "mean": 0.0,
+      "score_counts": {}
+    },
+    "manual_class_text_consistency": {
+      "n_scored": 0,
+      "mean": 0.0,
+      "score_counts": {}
+    }
+  }
+}

@@ -1,0 +1,73 @@
+# Next research baseline configuration.
+# Copy to configs/next_research_baselines.yaml in the working repo.
+
+labels:
+  - insulator_ok
+  - defect_flashover
+  - defect_broken
+
+paths:
+  train_jsonl_default: stage3_regrouped_v2/train_balanced/vlm_labels_v1_train_balanced_v2.annotated.jsonl
+  val_jsonl_default: stage3_regrouped_v2/val/vlm_labels_v1_val_v2.annotated.jsonl
+  dataset_root_candidates:
+    - /kaggle/input/datasets/kostyaryazanov/idid-coco-v3
+    - /kaggle/input/idid-coco-v3
+    - data
+
+hf_feature_models:
+  dinov2_base:
+    model_id: facebook/dinov2-base
+    batch_size: 16
+    priority: required
+  clip_b32:
+    model_id: openai/clip-vit-base-patch32
+    batch_size: 32
+    priority: required
+  clip_l14:
+    model_id: openai/clip-vit-large-patch14
+    batch_size: 16
+    priority: desired
+  siglip_b16_224:
+    model_id: google/siglip-base-patch16-224
+    batch_size: 16
+    priority: desired
+
+timm_feature_models:
+  resnet50:
+    model_id: resnet50.a1_in1k
+    batch_size: 32
+    priority: required_if_download_works
+  efficientnet_b0:
+    model_id: efficientnet_b0.ra_in1k
+    batch_size: 32
+    priority: desired
+  convnext_tiny:
+    model_id: convnext_tiny.fb_in1k
+    batch_size: 16
+    priority: optional
+
+classifiers:
+  logreg:
+    enabled: true
+    C_grid: [0.01, 0.03, 0.1, 0.3, 1.0, 3.0]
+    class_weight: [null, balanced]
+  svm:
+    enabled: true
+    C_grid: [0.1, 0.3, 1.0, 3.0]
+    kernel: [linear, rbf]
+    class_weight: [null, balanced]
+  mlp:
+    enabled: false
+    hidden_layer_sizes:
+      - [64]
+      - [128]
+    alpha_grid: [0.0001, 0.001, 0.01]
+
+selection:
+  n_splits: 5
+  primary_metric: macro_f1
+  tie_breakers:
+    - accuracy
+    - recall_defect_flashover
+    - recall_defect_broken
+  random_state: 42

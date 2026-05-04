@@ -1,0 +1,57 @@
+{
+  "run_name": "qwen_stage4_context_pad030_matched",
+  "paths": {
+    "gt_jsonl": "outputs\\stage3_regrouped_v2\\val\\vlm_labels_v1_val_v2.annotated.jsonl",
+    "pred_jsonl": "reports\\next_research\\structured_output_eval\\_matched_predictions\\qwen_stage4_context_pad030_matched_predictions.jsonl",
+    "sample_results_jsonl": null,
+    "manual_review_csv": null
+  },
+  "counts": {
+    "gt_total": 58,
+    "pred_total": 58,
+    "evaluated_total": 58,
+    "missing_predictions": 0,
+    "extra_predictions_without_gt": 0
+  },
+  "rates": {
+    "coarse_class_accuracy": 0.39655172413793105,
+    "visibility_accuracy": 0.7931034482758621,
+    "needs_review_accuracy": 0.8448275862068966,
+    "tag_exact_rate": 0.0,
+    "tag_mean_jaccard": 0.1442528735632184,
+    "description_present_rate": 1.0,
+    "description_generic_auto_rate": 0.017241379310344827
+  },
+  "manual_scores": {
+    "manual_tag_score": {
+      "n_scored": 0,
+      "mean": 0.0,
+      "score_counts": {}
+    },
+    "manual_description_relevance": {
+      "n_scored": 0,
+      "mean": 0.0,
+      "score_counts": {}
+    },
+    "manual_visual_evidence_score": {
+      "n_scored": 0,
+      "mean": 0.0,
+      "score_counts": {}
+    },
+    "manual_hallucination_score": {
+      "n_scored": 0,
+      "mean": 0.0,
+      "score_counts": {}
+    },
+    "manual_usefulness_score": {
+      "n_scored": 0,
+      "mean": 0.0,
+      "score_counts": {}
+    },
+    "manual_class_text_consistency": {
+      "n_scored": 0,
+      "mean": 0.0,
+      "score_counts": {}
+    }
+  }
+}
